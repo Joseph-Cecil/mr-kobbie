@@ -33,21 +33,7 @@ export function RecentSales() {
           <div className='font-medium'>+$39.00</div>
         </div>
       </div>
-      <div className='flex items-center gap-4'>
-        <Avatar className='h-9 w-9'>
-          <AvatarImage src='/avatars/03.png' alt='Avatar' />
-          <AvatarFallback>IN</AvatarFallback>
-        </Avatar>
-        <div className='flex flex-1 flex-wrap items-center justify-between'>
-          <div className='space-y-1'>
-          <p className='text-sm font-medium leading-none'>3rd January, 2024 - 4:20 PM</p>
-            <p className='text-sm text-muted-foreground'>
-              Transaction id: 24887236092 - Congratulations, you've deposited ...
-            </p>
-          </div>
-          <div className='font-medium'>+$299.00</div>
-        </div>
-      </div>
+      
 
       <div className='flex items-center gap-4'>
         <Avatar className='h-9 w-9'>
@@ -65,21 +51,8 @@ export function RecentSales() {
         </div>
       </div>
 
-      <div className='flex items-center gap-4'>
-        <Avatar className='h-9 w-9'>
-          <AvatarImage src='/avatars/05.png' alt='Avatar' />
-          <AvatarFallback>SD</AvatarFallback>
-        </Avatar>
-        <div className='flex flex-1 flex-wrap items-center justify-between'>
-          <div className='space-y-1'>
-          <p className='text-sm font-medium leading-none'>1st January, 2024 - 10:30 AM</p>
-            <p className='text-sm text-muted-foreground'>
-              Transaction id: 24887236092 - Congratulations, you've deposited ...
-            </p>
-          </div>
-          <div className='font-medium'>+$39.00</div>
-        </div>
-      </div>
+      
+      
     </div>
   )
 }
