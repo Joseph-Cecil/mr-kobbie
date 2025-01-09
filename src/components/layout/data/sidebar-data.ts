@@ -9,19 +9,17 @@ import {
   IconUserCog,
   IconUsers,
 } from '@tabler/icons-react'
-import { Command} from 'lucide-react'
 import { type SidebarData } from '../types'
 
 export const sidebarData: SidebarData = {
   user: {
-    name: 'satnaing',
-    email: 'satnaingdev@gmail.com',
+    name: 'Kobbie',
+    email: 'kobbie@gmail.com',
     avatar: '/avatars/shadcn.jpg',
   },
   teams: [
     {
       name: 'Welfare Portal',
-      logo: Command,
       plan: 'Organizational Welfare Portal',
     },
   ],
@@ -39,11 +37,6 @@ export const sidebarData: SidebarData = {
           url: '/track-loan',
           icon: IconChecklist,
         },
-        // {
-        //   title: 'Apps',
-        //   url: '/apps',
-        //   icon: IconPackages,
-        // },
         {
           title: 'Repayment Schedule',
           url: '/repayment-schedule',

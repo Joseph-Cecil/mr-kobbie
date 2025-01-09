@@ -13,7 +13,7 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { Overview } from './components/overview'
-import { RecentSales } from './components/recent-sales'
+import { RecentSales } from './components/transaction-history'
 
 export default function Dashboard() {
   return (
@@ -34,7 +34,7 @@ export default function Dashboard() {
         <div className='mb-2 -mt-7 flex items-center justify-between space-y-2'>
           <h1 className='text-2xl font-bold tracking-tight'>Staff Dashboard</h1>
           <div className='flex items-center space-x-2'>
-            <Button style={{color: 'whitesmoke'}}>Make a Deposit</Button>
+            <Button style={{color: 'whitesmoke'}}>Go To Reports</Button>
           </div>
         </div>
         <Tabs
