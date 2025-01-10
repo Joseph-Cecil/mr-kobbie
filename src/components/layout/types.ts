@@ -8,7 +8,6 @@ interface User {
 
 interface Team {
   name: string
-  logo: React.ElementType
   plan: string
 }
 
