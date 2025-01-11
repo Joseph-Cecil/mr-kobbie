@@ -20,9 +20,9 @@ export default function Tasks() {
       <Main>
         <div className='mb-2 flex items-center justify-between space-y-2 flex-wrap gap-x-4'>
           <div>
-            <h2 className='text-2xl font-bold tracking-tight'>Tasks</h2>
+            <h2 className='text-2xl font-bold tracking-tight'>Repayment Schedule</h2>
             <p className='text-muted-foreground'>
-              Here&apos;s a list of your tasks for this month!
+              Here&apos;s your Payment Plan!
             </p>
           </div>
           <div className='flex gap-2'>
@@ -30,7 +30,7 @@ export default function Tasks() {
             
           </div>
         </div>
-        <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
+        
         <CalendarHeatmap
   variantClassnames={[
     "text-white hover:text-white bg-green-400 hover:bg-green-400",
@@ -56,7 +56,7 @@ export default function Tasks() {
     { date: new Date('Jan 19, 2024'), weight: 6 }, { date: new Date('Apr 19, 2024'), weight: 13.5 }
   ]}
 /></div>
-        </div>
+        
       </Main>
 
 
