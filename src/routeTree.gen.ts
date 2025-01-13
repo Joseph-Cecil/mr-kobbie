@@ -40,6 +40,9 @@ const AuthenticatedTrackLoanIndexLazyImport = createFileRoute(
 const AuthenticatedSettingsIndexLazyImport = createFileRoute(
   '/_authenticated/settings/',
 )()
+const AuthenticatedReportIndexLazyImport = createFileRoute(
+  '/_authenticated/report/',
+)()
 const AuthenticatedRepaymentScheduleIndexLazyImport = createFileRoute(
   '/_authenticated/repayment-schedule/',
 )()
@@ -189,6 +192,15 @@ const AuthenticatedSettingsIndexLazyRoute =
     getParentRoute: () => AuthenticatedSettingsRouteLazyRoute,
   } as any).lazy(() =>
     import('./routes/_authenticated/settings/index.lazy').then((d) => d.Route),
+  )
+
+const AuthenticatedReportIndexLazyRoute =
+  AuthenticatedReportIndexLazyImport.update({
+    id: '/report/',
+    path: '/report/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/report/index.lazy').then((d) => d.Route),
   )
 
 const AuthenticatedRepaymentScheduleIndexLazyRoute =
@@ -436,6 +448,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepaymentScheduleIndexLazyImport
       parentRoute: typeof AuthenticatedRouteImport
     }
+    '/_authenticated/report/': {
+      id: '/_authenticated/report/'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof AuthenticatedReportIndexLazyImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/settings/': {
       id: '/_authenticated/settings/'
       path: '/'
@@ -488,6 +507,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHelpCenterIndexLazyRoute: typeof AuthenticatedHelpCenterIndexLazyRoute
   AuthenticatedHirePurchaseIndexLazyRoute: typeof AuthenticatedHirePurchaseIndexLazyRoute
   AuthenticatedRepaymentScheduleIndexLazyRoute: typeof AuthenticatedRepaymentScheduleIndexLazyRoute
+  AuthenticatedReportIndexLazyRoute: typeof AuthenticatedReportIndexLazyRoute
   AuthenticatedTrackLoanIndexLazyRoute: typeof AuthenticatedTrackLoanIndexLazyRoute
 }
 
@@ -501,6 +521,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedHirePurchaseIndexLazyRoute,
   AuthenticatedRepaymentScheduleIndexLazyRoute:
     AuthenticatedRepaymentScheduleIndexLazyRoute,
+  AuthenticatedReportIndexLazyRoute: AuthenticatedReportIndexLazyRoute,
   AuthenticatedTrackLoanIndexLazyRoute: AuthenticatedTrackLoanIndexLazyRoute,
 }
 
@@ -529,6 +550,7 @@ export interface FileRoutesByFullPath {
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/hire-purchase': typeof AuthenticatedHirePurchaseIndexLazyRoute
   '/repayment-schedule': typeof AuthenticatedRepaymentScheduleIndexLazyRoute
+  '/report': typeof AuthenticatedReportIndexLazyRoute
   '/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/track-loan': typeof AuthenticatedTrackLoanIndexLazyRoute
 }
@@ -553,6 +575,7 @@ export interface FileRoutesByTo {
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/hire-purchase': typeof AuthenticatedHirePurchaseIndexLazyRoute
   '/repayment-schedule': typeof AuthenticatedRepaymentScheduleIndexLazyRoute
+  '/report': typeof AuthenticatedReportIndexLazyRoute
   '/settings': typeof AuthenticatedSettingsIndexLazyRoute
   '/track-loan': typeof AuthenticatedTrackLoanIndexLazyRoute
 }
@@ -581,6 +604,7 @@ export interface FileRoutesById {
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/_authenticated/hire-purchase/': typeof AuthenticatedHirePurchaseIndexLazyRoute
   '/_authenticated/repayment-schedule/': typeof AuthenticatedRepaymentScheduleIndexLazyRoute
+  '/_authenticated/report/': typeof AuthenticatedReportIndexLazyRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/_authenticated/track-loan/': typeof AuthenticatedTrackLoanIndexLazyRoute
 }
@@ -609,6 +633,7 @@ export interface FileRouteTypes {
     | '/help-center'
     | '/hire-purchase'
     | '/repayment-schedule'
+    | '/report'
     | '/settings/'
     | '/track-loan'
   fileRoutesByTo: FileRoutesByTo
@@ -632,6 +657,7 @@ export interface FileRouteTypes {
     | '/help-center'
     | '/hire-purchase'
     | '/repayment-schedule'
+    | '/report'
     | '/settings'
     | '/track-loan'
   id:
@@ -658,6 +684,7 @@ export interface FileRouteTypes {
     | '/_authenticated/help-center/'
     | '/_authenticated/hire-purchase/'
     | '/_authenticated/repayment-schedule/'
+    | '/_authenticated/report/'
     | '/_authenticated/settings/'
     | '/_authenticated/track-loan/'
   fileRoutesById: FileRoutesById
@@ -726,6 +753,7 @@ export const routeTree = rootRoute
         "/_authenticated/help-center/",
         "/_authenticated/hire-purchase/",
         "/_authenticated/repayment-schedule/",
+        "/_authenticated/report/",
         "/_authenticated/track-loan/"
       ]
     },
@@ -807,6 +835,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/repayment-schedule/": {
       "filePath": "_authenticated/repayment-schedule/index.lazy.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/report/": {
+      "filePath": "_authenticated/report/index.lazy.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/settings/": {

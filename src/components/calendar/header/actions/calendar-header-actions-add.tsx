@@ -10,7 +10,7 @@ export default function CalendarHeaderActionsAdd() {
       onClick={() => setNewEventDialogOpen(true)}
     >
       <Plus />
-      Add Event
+      Add Payment Plan
     </Button>
   )
 }
