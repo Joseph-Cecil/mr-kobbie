@@ -39,9 +39,13 @@ const operatorOptions = {
 
 interface DataTableSearchProps {
     onFiltersChange: (filters: FilterType[]) => void
+    onPrint: () => void
 }
 
-export default function DataTableSearch({onFiltersChange}: DataTableSearchProps) {
+export default function DataTableSearch({
+    onFiltersChange,
+    onPrint,
+  }: DataTableSearchProps) {
     const [filters, setFilters] = useState<FilterType[]>([])
     const [open, setOpen] = useState(false)
     const [currentFilter, setCurrentFilter] = useState<Omit<FilterType, 'id'>>({
@@ -62,6 +66,32 @@ export default function DataTableSearch({onFiltersChange}: DataTableSearchProps)
             setOpen(false)
         }
     }
+
+    // const handlePrint = () => {
+    //     const printContent = document.getElementById("table-to-print");
+    //     if (printContent) {
+    //       const printWindow = window.open("", "_blank");
+    //       printWindow?.document.write(`
+    //         <html>
+    //           <head>
+    //             <style>
+    //               body { font-family: Arial, sans-serif; }
+    //               table { width: 100%; border-collapse: collapse; }
+    //               th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    //               th { background-color: #f2f2f2; }
+    //             </style>
+    //           </head>
+    //           <body>
+    //             <h2>Print Report</h2>
+    //             ${printContent.innerHTML}
+    //           </body>
+    //         </html>
+    //       `);
+    //       printWindow?.document.close();
+    //       printWindow?.print();
+    //     }
+    //   };
+    
 
     const handleRemoveFilter = (id: string) => {
         const updatedFilters = filters.filter(filter => filter.id !== id)
@@ -191,7 +221,7 @@ export default function DataTableSearch({onFiltersChange}: DataTableSearchProps)
                     </Button>
                 </Badge>
             ))}
-            <Button size="lg" onClick={handleAddFilter} style={{color: 'whitesmoke'}}>
+            <Button size="lg" onClick={onPrint} style={{color: 'whitesmoke'}}>
                             Print Report
                         </Button>
         </div>
