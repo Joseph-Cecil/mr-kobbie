@@ -1,5 +1,5 @@
 import CalendarDemo from '@/components/calendar-demo'
 
-export default function Home() {
+export default function RepaymentSchedule() {
   return <CalendarDemo />
 }

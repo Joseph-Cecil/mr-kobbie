@@ -126,7 +126,7 @@ export default function CalendarManageEventDialog() {
 
   return (
     <Dialog open={manageEventDialogOpen} onOpenChange={handleClose}>
-      <DialogContent>
+      <DialogContent aria-labelledby="dialog-title" aria-describedby="dialog-description">
         <DialogHeader>
           <DialogTitle>Manage event</DialogTitle>
         </DialogHeader>

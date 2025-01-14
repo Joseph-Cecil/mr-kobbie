@@ -2,7 +2,6 @@ import { HTMLAttributes, useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,6 +14,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
+import { useNavigate } from '@tanstack/react-router'
 
 type SignUpFormProps = HTMLAttributes<HTMLDivElement>
 
@@ -40,6 +40,7 @@ const formSchema = z
   })
 
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,6 +56,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
     setIsLoading(true)
     // eslint-disable-next-line no-console
     console.log(data)
+    navigate({to: '/'})
 
     setTimeout(() => {
       setIsLoading(false)
@@ -115,28 +117,22 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
               </div>
               <div className='relative flex justify-center text-xs uppercase'>
                 <span className='bg-background px-2 text-muted-foreground'>
-                  Or continue with
+                  Already Have An Account?
                 </span>
               </div>
             </div>
 
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center'>
               <Button
                 variant='outline'
                 className='w-full'
                 type='button'
                 disabled={isLoading}
+                onClick={() => navigate({to: '/sign-in'})}
               >
-                <IconBrandGithub className='h-4 w-4' /> GitHub
+                Sign In
               </Button>
-              <Button
-                variant='outline'
-                className='w-full'
-                type='button'
-                disabled={isLoading}
-              >
-                <IconBrandFacebook className='h-4 w-4' /> Facebook
-              </Button>
+              
             </div>
           </div>
         </form>

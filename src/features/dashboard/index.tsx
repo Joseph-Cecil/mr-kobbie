@@ -128,7 +128,7 @@ export default function Dashboard() {
                 <CardContent>
                   <div className='text-2xl font-bold'>₵12,234</div>
                   <p className='text-xs text-muted-foreground'>
-                    10 x Total Deposits
+                    5 x Total Deposits
                   </p>
                 </CardContent>
               </Card>
