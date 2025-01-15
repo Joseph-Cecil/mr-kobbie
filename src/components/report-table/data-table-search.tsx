@@ -66,31 +66,6 @@ export default function DataTableSearch({
             setOpen(false)
         }
     }
-
-    // const handlePrint = () => {
-    //     const printContent = document.getElementById("table-to-print");
-    //     if (printContent) {
-    //       const printWindow = window.open("", "_blank");
-    //       printWindow?.document.write(`
-    //         <html>
-    //           <head>
-    //             <style>
-    //               body { font-family: Arial, sans-serif; }
-    //               table { width: 100%; border-collapse: collapse; }
-    //               th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    //               th { background-color: #f2f2f2; }
-    //             </style>
-    //           </head>
-    //           <body>
-    //             <h2>Print Report</h2>
-    //             ${printContent.innerHTML}
-    //           </body>
-    //         </html>
-    //       `);
-    //       printWindow?.document.close();
-    //       printWindow?.print();
-    //     }
-    //   };
     
 
     const handleRemoveFilter = (id: string) => {

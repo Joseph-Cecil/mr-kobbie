@@ -1,14 +1,14 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getCoreRowModel, getPaginationRowModel, PaginationState, useReactTable } from "@tanstack/react-table";
-import { staticData } from "./data"; // Import static data
+import { staticData } from "./data"; // Import static data from `data.ts`
 import DataTableSearch, { FilterType } from "./data-table-search";
 import { BasicDataTable } from "./basic-data-table";
 import { columns } from "./columns";
 
 export function DataTable() {
-  const [rowCount] = useState<number>(staticData.length); // Total rows from static data
-  const [tableData, setTableData] = useState(staticData); // Use static data
-  const [isLoading] = useState(false); // No loading state required for static data
+  const [tableData, setTableData] = useState(staticData); // Initialize with static data
+  const [rowCount, setRowCount] = useState(staticData.length); // Total rows from static data
+  const [isLoading, setIsLoading] = useState(false); // Loading state for future enhancements
   const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -17,6 +17,16 @@ export function DataTable() {
 
   // Ref to access the table's print functionality
   const printRef = useRef<HTMLTableElement>(null);
+
+  useEffect(() => {
+    // Simulate fetching static data (could be replaced with actual API fetch if needed)
+    setIsLoading(true);
+    setTimeout(() => {
+      setTableData(staticData); // Set data from static source
+      setRowCount(staticData.length); // Update row count
+      setIsLoading(false);
+    }, 500); // Simulated delay
+  }, []);
 
   // Filter static data locally
   const handleFiltersChange = (newFilters: FilterType[]) => {
@@ -99,7 +109,6 @@ export function DataTable() {
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-2"></div>
               <div className="flex items-center space-x-2">
-                {/* Pass the handlePrint function as a prop */}
                 <DataTableSearch onFiltersChange={handleFiltersChange} onPrint={handlePrint} />
               </div>
             </div>
@@ -107,7 +116,6 @@ export function DataTable() {
         </div>
       </div>
       <div className="container mx-auto py-10">
-        {/* Pass the ref to the BasicDataTable component */}
         <BasicDataTable table={table} isLoading={isLoading} showPagination={true} ref={printRef} />
       </div>
     </div>

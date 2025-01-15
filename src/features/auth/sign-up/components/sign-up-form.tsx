@@ -20,10 +20,15 @@ type SignUpFormProps = HTMLAttributes<HTMLDivElement>
 
 const formSchema = z
   .object({
-    email: z
+    name: z
       .string()
-      .min(1, { message: 'Please enter your email' })
-      .email({ message: 'Invalid email address' }),
+      .min(1, { message: 'Please enter your email' }),
+      staff_id: z
+      .number()
+      .min(1, { message: 'Please enter your staff id' }),
+      birthdate: z
+      .date()
+      .refine((date) => date !== null, { message: 'Please enter your birthdate' }),
     password: z
       .string()
       .min(1, {
@@ -46,7 +51,9 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
+      name: '',
+      staff_id: 0,
+      birthdate: new Date(),
       password: '',
       confirmPassword: '',
     },
@@ -70,12 +77,38 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
           <div className='grid gap-2'>
             <FormField
               control={form.control}
-              name='email'
+              name='name'
               render={({ field }) => (
                 <FormItem className='space-y-1'>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder='name@example.com' {...field} />
+                    <Input placeholder='Nana Kwesi' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='staff_id'
+              render={({ field }) => (
+                <FormItem className='space-y-1'>
+                  <FormLabel>Staff Id</FormLabel>
+                  <FormControl>
+                    <Input placeholder='4665' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='birthdate'
+              render={({ field }) => (
+                <FormItem className='space-y-1'>
+                  <FormLabel>Birthdate</FormLabel>
+                  <FormControl>
+                    <Input placeholder='06/4/1999' {...field} value={field.value.toISOString().split('T')[0]} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

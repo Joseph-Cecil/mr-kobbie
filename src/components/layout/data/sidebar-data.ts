@@ -4,6 +4,7 @@ import {
   IconMessages,
   IconNotification,
   IconPalette,
+  IconReportAnalytics,
   IconSettings,
   IconTool,
   IconUserCog,
@@ -31,6 +32,11 @@ export const sidebarData: SidebarData = {
           title: 'Dashboard',
           url: '/',
           icon: IconLayoutDashboard,
+        },
+        {
+          title: 'Report',
+          url: '/report',
+          icon: IconReportAnalytics,
         },
         {
           title: 'Track Loan',

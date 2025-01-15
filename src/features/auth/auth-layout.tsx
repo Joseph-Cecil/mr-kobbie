@@ -9,10 +9,10 @@ export default function AuthLayout({ children }: Props) {
         <div className="-ml-10 mb-3 flex items-center justify-center">
           
           <img 
-            src="/Cocobod Logo-01.png" 
+            src="/Cocobod 2.jpg" 
             alt="Cocobod Logo" 
             className="max-w-full h-auto" 
-            style={{ maxWidth: '200px', height: 'auto' }} 
+            style={{ maxWidth: '120px', height: 'auto', borderRadius:'10%' }} 
           />
         </div>
         {children}

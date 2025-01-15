@@ -19,10 +19,9 @@ import { PasswordInput } from '@/components/password-input'
 type UserAuthFormProps = HTMLAttributes<HTMLDivElement>
 
 const formSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'Please enter your email' })
-    .email({ message: 'Invalid email address' }),
+  staff_id: z
+    .number()
+    .min(1, { message: 'Please enter your staff Id' }),
   password: z
     .string()
     .min(1, {
@@ -40,7 +39,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
+      staff_id: 0,
       password: '',
     },
   })
@@ -63,12 +62,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <div className='grid gap-2'>
             <FormField
               control={form.control}
-              name='email'
+              name='staff_id'
               render={({ field }) => (
                 <FormItem className='space-y-1'>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Staff Id</FormLabel>
                   <FormControl>
-                    <Input placeholder='name@example.com' {...field} />
+                    <Input placeholder='4352' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
