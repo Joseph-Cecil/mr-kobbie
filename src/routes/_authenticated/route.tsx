@@ -16,10 +16,10 @@ function isAuthenticated(): boolean {
 export const Route = createFileRoute('/_authenticated')({
   component: () => {
  
-    if (!isAuthenticated()) {
+    // if (!isAuthenticated()) {
       
-      return <SignIn />
-    }
+    //   return <SignIn />
+    // }
 
     // Render the main authenticated component
     return <RouteComponent />
