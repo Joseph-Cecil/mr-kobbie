@@ -42,24 +42,24 @@ export const columns: ColumnDef<Task>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  {
-    accessorKey: 'title',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Title' />
-    ),
-    cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.label)
+  // {
+  //   accessorKey: 'title',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Title' />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const label = labels.find((label) => label.value === row.original.label)
 
-      return (
-        <div className='flex space-x-2'>
-          {label && <Badge variant='outline'>{label.label}</Badge>}
-          <span className='max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]'>
-            {row.getValue('title')}
-          </span>
-        </div>
-      )
-    },
-  },
+  //     return (
+  //       <div className='flex space-x-2'>
+  //         {label && <Badge variant='outline'>{label.label}</Badge>}
+  //         <span className='max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]'>
+  //           {row.getValue('title')}
+  //         </span>
+  //       </div>
+  //     )
+  //   },
+  // },
   {
     accessorKey: 'status',
     header: ({ column }) => (

@@ -5,13 +5,13 @@ import { SearchProvider } from '@/context/search-context'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/layout/app-sidebar'
 import SkipToMain from '@/components/skip-to-main'
-import SignIn from '@/features/auth/sign-in'
+// import SignIn from '@/features/auth/sign-in'
 
 
-function isAuthenticated(): boolean {
-  const token = Cookies.get('authToken') 
-  return Boolean(token)
-}
+// function isAuthenticated(): boolean {
+//   const token = Cookies.get('authToken') 
+//   return Boolean(token)
+// }
 
 export const Route = createFileRoute('/_authenticated')({
   component: () => {
