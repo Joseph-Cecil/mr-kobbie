@@ -1,14 +1,14 @@
 import {
+  IconCalendar,
   IconChecklist,
   IconLayoutDashboard,
-  IconMessages,
   IconNotification,
   IconPalette,
   IconReportAnalytics,
   IconSettings,
+  IconShoppingBagDiscount,
   IconTool,
   IconUserCog,
-  IconUsers,
 } from '@tabler/icons-react'
 import { type SidebarData } from '../types'
 
@@ -46,12 +46,12 @@ export const sidebarData: SidebarData = {
         {
           title: 'Repayment Schedule',
           url: '/repayment-schedule',
-          icon: IconMessages,
+          icon: IconCalendar,
         },
         {
           title: 'Hire Purchase',
           url: '/hire-purchase',
-          icon: IconUsers,
+          icon: IconShoppingBagDiscount,
         },
       ],
     },
