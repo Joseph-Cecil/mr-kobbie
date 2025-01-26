@@ -1,5 +1,5 @@
 import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,18 +16,48 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import useLogout from '../../hooks/useLogout'
+import { useNavigate } from '@tanstack/react-router';
+import { fetchUserProfile } from '@/api/userApi';
+import {ProfileData} from '../../../types/profile';
+import { useEffect, useState } from 'react'
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+export function NavUser() {
+  const [userProfile, setUserProfile] = useState<ProfileData | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+  
   const { isMobile } = useSidebar()
-  const logout = useLogout()
+  const logout = useLogout();
+  const navigate = useNavigate();
+
+    // Fetch and populate profile data
+    useEffect(() => {
+      const loadProfile = async () => {
+        try {
+          const data = await fetchUserProfile();
+          setUserProfile(data);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (err) {
+          setError("Failed to load profile data. Please try again.");
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      loadProfile();
+    }, [userProfile]);
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+  
+    if (error) {
+      return <div className="text-red-500">{error}</div>;
+    }
+
+    // Generate initials from firstName and lastName
+  const initials = `${userProfile?.firstName?.[0] || ''}${userProfile?.lastName?.[0] || ''}`.toUpperCase();
+  
 
   return (
     <SidebarMenu>
@@ -39,12 +69,11 @@ export function NavUser({
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
               <Avatar className='h-8 w-8 rounded-lg'>
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className='rounded-lg'>SN</AvatarFallback>
+                <AvatarFallback className='rounded-lg'>{initials}</AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-semibold'>{user.name}</span>
-                <span className='truncate text-xs'>{user.email}</span>
+                <span className='truncate font-semibold'>{userProfile?.firstName}</span>
+                <span className='truncate text-xs'>{userProfile?.lastName}</span>
               </div>
               <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>
@@ -58,12 +87,11 @@ export function NavUser({
             <DropdownMenuLabel className='p-0 font-normal'>
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                 <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className='rounded-lg'>SN</AvatarFallback>
+                  <AvatarFallback className='rounded-lg'>{initials}</AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-semibold'>{user.name}</span>
-                  <span className='truncate text-xs'>{user.email}</span>
+                  <span className='truncate font-semibold'>{userProfile?.firstName}</span>
+                  <span className='truncate text-xs'>{userProfile?.lastName}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -71,12 +99,12 @@ export function NavUser({
             <DropdownMenuGroup></DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={()=>{navigate({to: '/settings/account'})}}>
                 <BadgeCheck />
                 Account
               </DropdownMenuItem>
 
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={()=>{navigate({to: '/settings/notifications'})}}>
                 <Bell />
                 Notifications
               </DropdownMenuItem>

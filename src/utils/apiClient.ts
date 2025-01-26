@@ -7,6 +7,7 @@ const apiClient = axios.create({
   },
 });
 
+// Add Authorization Header
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -14,5 +15,19 @@ apiClient.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// Handle Expired Tokens
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401) {
+      // eslint-disable-next-line no-console
+      console.error("Token expired or unauthorized. Redirecting to login.");
+      localStorage.removeItem("token");
+      window.location.href = "/sign-in";
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default apiClient;

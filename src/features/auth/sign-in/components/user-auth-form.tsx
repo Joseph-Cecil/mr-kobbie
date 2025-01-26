@@ -49,7 +49,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       const { staffId, password } = data;
       const response = await loginUser(staffId, password);
       localStorage.setItem("token", response.token);
-      alert("Login successful");
       navigate({ to: "/" }); 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
