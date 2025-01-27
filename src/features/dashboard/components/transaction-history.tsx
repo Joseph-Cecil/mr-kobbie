@@ -15,7 +15,7 @@ export function RecentSales() {
               Transaction id: 24887236092 - Congratulations, you've deposited ...
             </p>
           </div>
-          <div className='font-medium'>+$1,999.00</div>
+          <div className='font-medium'>+₵1,999.00</div>
         </div>
       </div>
       <div className='flex items-center gap-4'>
@@ -30,7 +30,7 @@ export function RecentSales() {
               Transaction id: 24887236092 - Congratulations, you've deposited ...
             </p>
           </div>
-          <div className='font-medium'>+$39.00</div>
+          <div className='font-medium'>+₵39.00</div>
         </div>
       </div>
       
@@ -47,7 +47,7 @@ export function RecentSales() {
               Transaction id: 24887236092 - Congratulations, you've deposited ...
             </p>
           </div>
-          <div className='font-medium'>+$99.00</div>
+          <div className='font-medium'>+₵99.00</div>
         </div>
       </div>
 

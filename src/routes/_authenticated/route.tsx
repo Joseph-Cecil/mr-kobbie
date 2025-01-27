@@ -21,7 +21,7 @@ export const Route = createFileRoute('/_authenticated')({
     //   return <SignIn />
     // }
 
-    // Render the main authenticated component
+    // Render the main authenticated component  
     return <RouteComponent />
   },
 })

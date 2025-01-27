@@ -37,12 +37,19 @@ export default function Dashboard() {
 
       {/* ===== Main ===== */}
       <Main>
-        <div className='mb-2 -mt-7 flex items-center justify-between space-y-2'>
-          <h1 className='text-2xl font-bold tracking-tight'>Staff Dashboard</h1>
-          <div className='flex items-center space-x-2'>
-            <Button style={{color: 'whitesmoke'}} onClick={handleGoToReports}>Go To Reports</Button>
-          </div>
-        </div>
+      <div className="mb-2 -mt-7 flex flex-col items-start space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+  <h1 className="text-xl font-bold tracking-tight sm:text-2xl">Staff Dashboard</h1>
+  <div className="flex flex-wrap items-center space-x-2 sm:flex-nowrap">
+    <Button
+      style={{ color: 'whitesmoke' }}
+      onClick={handleGoToReports}
+    >
+      Partial Withdrawal
+    </Button>
+    
+  </div>
+</div>
+
         <Tabs
           orientation='vertical'
           defaultValue='overview'
@@ -83,10 +90,11 @@ export default function Dashboard() {
                   </p>
                 </CardContent>
               </Card>
+              
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    # Total Deposit Funds
+                    # Partial Withdrawal
                   </CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -104,7 +112,7 @@ export default function Dashboard() {
                 <CardContent>
                   <div className='text-2xl font-bold'>+2350</div>
                   <p className='text-xs text-muted-foreground'>
-                    +180.1% from last month
+                    50% Of Total Contributions
                   </p>
                 </CardContent>
               </Card>
