@@ -1,6 +1,6 @@
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -8,138 +8,155 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { useEffect, useState } from 'react'
-import { fetchUserProfile } from '@/api/userApi';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { changePassword } from "@/api/authApi";
+import { useNavigate } from "@tanstack/react-router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-type ProfileData = {
-  firstName: string;
-  lastName: string;
-  role: string;
-  dob: string;
-  language: string;
-};
-
-const accountFormSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, {
-      message: 'Name must be at least 2 characters.',
-    })
-    .max(30, {
-      message: 'Name must not be longer than 30 characters.',
-    }),
-  dob: z.date({
-    required_error: 'A date of birth is required.',
-  }),
-  language: z.string({
-    required_error: 'Please select a language.',
-  }),
-})
-
-
-// // This can come from your database or API.
-// const defaultValues: Partial<AccountFormValues> = {
-//   name: '',
-// }
-
-export function AccountForm() {
-  const form = useForm({
-    resolver: zodResolver(accountFormSchema),
-    
+// Schema for password change validation
+const passwordSchema = z
+  .object({
+    oldPassword: z
+      .string()
+      .min(6, { message: "Old password must be at least 6 characters." }),
+    newPassword: z
+      .string()
+      .min(6, { message: "New password must be at least 6 characters." }),
+    confirmNewPassword: z
+      .string()
+      .min(6, { message: "Confirm password must be at least 6 characters." }),
+  })
+  .superRefine((data, ctx) => {
+    if (data.newPassword !== data.confirmNewPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Passwords do not match.",
+        path: ["confirmNewPassword"],
+      });
+    }
   });
 
-  const [profileData, setProfileData] = useState<ProfileData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+export function AccountForm() {
+  const navigate = useNavigate();
+  const passwordForm = useForm<{
+    oldPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
+  }>({
+    resolver: zodResolver(passwordSchema),
+  });
 
-  // Fetch and populate profile data
-  useEffect(() => {
-    const loadProfile = async () => {
-      try {
-        const data = await fetchUserProfile();
-        setProfileData(data);
-        // eslint-disable-next-line no-console
-        console.log(profileData)
+  const [isLoading, setIsLoading] = useState(false);
 
-        // Populate form with profile data
-        form.setValue("firstName", data.firstName || "");
-        form.setValue("lastName", data.lastName || "");
-        form.setValue("dob", data.dob ? new Date(data.dob) : new Date()); // If dob exists, convert it to Date object, otherwise use current date
-        form.setValue("role", data.role || "");
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (err) {
-        setError("Failed to load profile data. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handlePasswordChange: SubmitHandler<{
+    oldPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
+  }> = async (values) => {
+    setIsLoading(true); // Start loading
+    try {
+      await changePassword(values.oldPassword, values.newPassword);
 
-    loadProfile();
-  }, [form, profileData]);
+      // Show success toast
+      
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+      passwordForm.reset(); // Reset the form
 
-  if (error) {
-    return <div className="text-red-500">{error}</div>;
-  }
+      // Redirect to homepage after a short delay
+      setTimeout(() => navigate({ to: "/" }), 1000);
+      
+      toast.success("Password changed successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
+      // Show error toast
+      toast.error("Failed to change password. Please check your old password.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
 
-
+      passwordForm.setError("oldPassword", {
+        type: "manual",
+        message: "Failed to change password. Please check your old password.",
+      });
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
+  };
 
   return (
-    <Form {...form}>
-      <form className="space-y-8">
-        {/* Name Field */}
-        <FormField
-          control={form.control}
-          name="firstName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>First Name</FormLabel>
-              <FormControl>
-                <Input placeholder="First Name" {...field} disabled={true} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-<FormField
-          control={form.control}
-          name="lastName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Last Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Name" {...field} disabled={true} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-<FormField
-          control={form.control}
-          name="role"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Role</FormLabel>
-              <FormControl>
-                <Input placeholder="Name" {...field} disabled />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-   
-
-     
-
-       
-      </form>
-    </Form>
+    <div className="space-y-12">
+      <ToastContainer />
+      <Form {...passwordForm}>
+        <form
+          className="space-y-8"
+          onSubmit={passwordForm.handleSubmit(handlePasswordChange)}
+        >
+          <FormField
+            control={passwordForm.control}
+            name="oldPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Old Password</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} placeholder="" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={passwordForm.control}
+            name="newPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>New Password</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} placeholder="" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={passwordForm.control}
+            name="confirmNewPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm New Password</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} placeholder="" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+            style={{ color: "whitesmoke" }}
+          >
+            {isLoading ? "Changing Password..." : "Change Password"}
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }

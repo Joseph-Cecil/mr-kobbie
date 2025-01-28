@@ -69,7 +69,7 @@ export const sidebarData: SidebarData = {
               icon: IconUserCog,
             },
             {
-              title: 'Account',
+              title: 'Change Password',
               url: '/settings/account',
               icon: IconTool,
             },

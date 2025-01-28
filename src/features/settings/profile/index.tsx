@@ -1,11 +1,11 @@
 import ContentSection from '../components/content-section'
-import ProfileForm from './profile-form'
+import { ProfileForm } from './profile-form'
 
-export default function SettingsProfile() {
+export default function SettingsAccount() {
   return (
     <ContentSection
       title='Profile'
-      desc='This is how others will see you on the site.'
+      desc='Find your profile Details Here. You cannot update, Kindly contact administrator to make any changes.'
     >
       <ProfileForm />
     </ContentSection>

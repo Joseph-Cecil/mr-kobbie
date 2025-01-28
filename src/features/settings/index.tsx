@@ -56,7 +56,7 @@ const sidebarNavItems = [
     href: '/settings',
   },
   {
-    title: 'Account',
+    title: 'Change Password',
     icon: <IconTool size={18} />,
     href: '/settings/account',
   },

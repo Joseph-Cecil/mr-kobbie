@@ -44,7 +44,7 @@ export default function Dashboard() {
       style={{ color: 'whitesmoke' }}
       onClick={handleGoToReports}
     >
-      Partial Withdrawal
+      Go To Reports
     </Button>
     
   </div>
