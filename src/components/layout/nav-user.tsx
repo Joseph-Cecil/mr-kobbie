@@ -1,5 +1,5 @@
-import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from 'lucide-react'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,56 +8,59 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '@/components/ui/sidebar'
-import useLogout from '../../hooks/useLogout'
-import { useNavigate } from '@tanstack/react-router';
-import { fetchUserProfile } from '@/api/userApi';
-import {ProfileData} from '../../../types/profile';
-import { useEffect, useState } from 'react'
+} from "@/components/ui/sidebar";
+import useLogout from "../../hooks/useLogout";
+import { useNavigate } from "@tanstack/react-router";
+import { fetchUserProfile } from "@/api/userApi";
+import { ProfileData } from "../../../types/profile";
+import { useEffect, useState } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 export function NavUser() {
   const [userProfile, setUserProfile] = useState<ProfileData | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-  
-  const { isMobile } = useSidebar()
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const { isMobile } = useSidebar();
   const logout = useLogout();
   const navigate = useNavigate();
 
-    // Fetch and populate profile data
-    useEffect(() => {
-      const loadProfile = async () => {
-        try {
-          const data = await fetchUserProfile();
-          setUserProfile(data);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (err) {
-          setError("Failed to load profile data. Please try again.");
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      loadProfile();
-    }, [userProfile]);
+  // Fetch and populate profile data
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const data = await fetchUserProfile();
+        setUserProfile(data);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (err) {
+        setError("Failed to load profile data. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (loading) {
-      return <div>Loading...</div>;
-    }
-  
-    if (error) {
-      return <div className="text-red-500">{error}</div>;
-    }
+    loadProfile();
+  }, []);
 
-    // Generate initials from firstName and lastName
-  const initials = `${userProfile?.firstName?.[0] || ''}${userProfile?.lastName?.[0] || ''}`.toUpperCase();
-  
+  // Show skeleton while loading
+  if (loading) {
+    return (
+      <div className="h-8 w-8 rounded-lg">
+        <Skeleton className="h-8 w-8 rounded-lg" />
+      </div>
+    );
+  }
+
+  // Generate initials or fallback to '?'
+  const initials = error
+    ? "?"
+    : `${userProfile?.firstName?.[0] || ""}${userProfile?.lastName?.[0] || ""}`.toUpperCase();
 
   return (
     <SidebarMenu>
@@ -65,33 +68,41 @@ export function NavUser() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
-              size='lg'
-              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className='h-8 w-8 rounded-lg'>
-                <AvatarFallback className='rounded-lg'>{initials}</AvatarFallback>
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
               </Avatar>
-              <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-semibold'>{userProfile?.firstName}</span>
-                <span className='truncate text-xs'>{userProfile?.lastName}</span>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">
+                  {userProfile?.firstName || "Unknown"}
+                </span>
+                <span className="truncate text-xs">
+                  {userProfile?.lastName || "User"}
+                </span>
               </div>
-              <ChevronsUpDown className='ml-auto size-4' />
+              <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
-            side={isMobile ? 'bottom' : 'right'}
-            align='end'
+            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            side={isMobile ? "bottom" : "right"}
+            align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className='p-0 font-normal'>
-              <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-                <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarFallback className='rounded-lg'>{initials}</AvatarFallback>
+            <DropdownMenuLabel className="p-0 font-normal">
+              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
                 </Avatar>
-                <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-semibold'>{userProfile?.firstName}</span>
-                  <span className='truncate text-xs'>{userProfile?.lastName}</span>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">
+                    {userProfile?.firstName || "Unknown"}
+                  </span>
+                  <span className="truncate text-xs">
+                    {userProfile?.lastName || "User"}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -99,12 +110,11 @@ export function NavUser() {
             <DropdownMenuGroup></DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={()=>{navigate({to: '/settings/account'})}}>
+              <DropdownMenuItem onClick={() => navigate({ to: "/settings/account" })}>
                 <BadgeCheck />
                 Account
               </DropdownMenuItem>
-
-              <DropdownMenuItem onClick={()=>{navigate({to: '/settings/notifications'})}}>
+              <DropdownMenuItem onClick={() => navigate({ to: "/settings/notifications" })}>
                 <Bell />
                 Notifications
               </DropdownMenuItem>
@@ -118,5 +128,5 @@ export function NavUser() {
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

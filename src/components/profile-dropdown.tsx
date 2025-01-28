@@ -15,6 +15,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { fetchUserProfile } from '@/api/userApi';
 import { ProfileData } from 'types/profile';
 import { useEffect, useState } from 'react';
+import { Skeleton } from './ui/skeleton';
 
 export function ProfileDropdown() {
   const [userProfile, setUserProfile] = useState<ProfileData | null>(null);
@@ -40,15 +41,19 @@ export function ProfileDropdown() {
     loadProfile();
   }, [userProfile]);
 
-  const initials = `${userProfile?.firstName?.[0] || ''}${userProfile?.lastName?.[0] || ''}`.toUpperCase();
-
-  if(loading){
-    return <div>Loading...</div>
+  // Show skeleton while loading
+  if (loading) {
+    return (
+      <div className="h-8 w-8 rounded-lg">
+        <Skeleton className="h-8 w-8 rounded-lg" />
+      </div>
+    );
   }
 
-  if(error){
-    return <div className='text-red-500'>{error}</div>
-  };
+  // Generate initials or fallback to '?'
+  const initials = error
+    ? "?"
+    : `${userProfile?.firstName?.[0] || ""}${userProfile?.lastName?.[0] || ""}`.toUpperCase();
 
   
   return (
