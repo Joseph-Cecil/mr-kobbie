@@ -1,28 +1,27 @@
-import { z } from 'zod'
-
-const userStatusSchema = z.union([
-  z.literal('active'),
-  z.literal('inactive'),
-  z.literal('invited'),
-  z.literal('suspended'),
-])
-export type UserStatus = z.infer<typeof userStatusSchema>
+import { z } from 'zod';
 
 const userRoleSchema = z.union([
   z.literal('admin'),
   z.literal('staff'),
-])
+]);
 
+// Adjust schema to expect _id instead of id and map it
 const userSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(), // id is optional here
   firstName: z.string(),
   lastName: z.string(),
   staffId: z.string(),
-  status: userStatusSchema,
   role: userRoleSchema,
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-})
-export type User = z.infer<typeof userSchema>
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
 
-export const userListSchema = z.array(userSchema)
+// Extend the schema with a transform to rename _id to id
+export const userListSchema = z.array(
+  userSchema.transform((data) => ({
+    ...data,
+    _id: data.id,  // Rename _id to id
+  }))
+);
+
+export type User = z.infer<typeof userSchema>;

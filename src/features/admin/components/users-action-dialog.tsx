@@ -28,7 +28,8 @@ import { SelectDropdown } from '@/components/select-dropdown'
 import { userTypes } from '../data/data'
 import { User } from '../data/schema'
 import { useState } from 'react'
-import { registerUser } from '@/api/authApi'
+import { registerUser } from '@/api/authApi';
+import { resetPassword } from '@/api/authApi'
 
 const formSchema = z
   .object({
@@ -121,17 +122,27 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
   const onSubmit = async (values: UserForm) => {
     setLoading(true);
     try {
-      await registerUser(JSON.stringify(values));
-      toast({
-        title: "Success",
-        description: "User registered successfully!",
-      });
+      if (values.isEdit) {
+        // Call Reset Password API
+        await resetPassword(values.staffId, values.password);
+        toast({
+          title: "Success",
+          description: "Password reset successfully!",
+        });
+      } else {
+        // Call Register User API
+        await registerUser(JSON.stringify(values));
+        toast({
+          title: "Success",
+          description: "User registered successfully!",
+        });
+      }
       form.reset();
       onOpenChange(false);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast({
-        title: "Registration Failed",
+        title: values.isEdit ? "Password Reset Failed" : "Registration Failed",
         description: error?.response?.data?.message || "Something went wrong.",
         variant: "destructive",
       });
@@ -179,6 +190,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                         className='col-span-4'
                         autoComplete='off'
                         {...field}
+                        disabled = {isEdit}
                       />
                     </FormControl>
                     <FormMessage className='col-span-4 col-start-3' />
@@ -199,6 +211,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                         className='col-span-4'
                         autoComplete='off'
                         {...field}
+                        disabled = {isEdit}
                       />
                     </FormControl>
                     <FormMessage className='col-span-4 col-start-3' />
@@ -218,6 +231,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                         placeholder='john_doe'
                         className='col-span-4'
                         {...field}
+                        disabled = {isEdit}
                       />
                     </FormControl>
                     <FormMessage className='col-span-4 col-start-3' />
@@ -237,6 +251,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                       onValueChange={field.onChange}
                       placeholder='Select a role'
                       className='col-span-4'
+                      disabled = {isEdit}
                       items={userTypes.map(({ label, value }) => ({
                         label,
                         value,
@@ -290,7 +305,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         </ScrollArea>
         <DialogFooter>
           <Button style={{color:"whitesmoke"}} type='submit' form='user-form'>
-            Create User
+          {isEdit ? "Update Existing Staff. " : "Create new user here. "}
           </Button>
         </DialogFooter>
       </DialogContent>

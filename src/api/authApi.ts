@@ -13,9 +13,16 @@ export const registerUser = async (data: string) => {
 };
 
 // Reset Password
-export const resetPassword = async (staffNumber: string, newPassword: string) => {
-  const response = await apiClient.put(`/auth/reset-password`, { staffNumber, newPassword });
+export const resetPassword = async (staffId: string, newPassword: string) => {
+  try {
+    const response = await apiClient.put(`http://localhost:5000/api/auth/reset-password`, { staffId, newPassword });
   return response.data;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error reseting Password", error);
+    throw new Error("Failed to reset password. Please try again");
+  }
+  
 };
 
 // Change Password

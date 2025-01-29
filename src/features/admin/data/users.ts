@@ -1,24 +1,36 @@
-import { faker } from '@faker-js/faker'
+import { getAllUsers } from "../../../api/adminApi";
+import { userListSchema, User } from "./schema";
 
-export const users = Array.from({ length: 20 }, () => {
-  const firstName = faker.person.firstName()
-  const lastName = faker.person.lastName()
-  return {
-    id: faker.string.uuid(),
-    firstName,
-    lastName,
-    staffId: faker.helpers.replaceSymbols('####'),
-    status: faker.helpers.arrayElement([
-      'active',
-      'inactive',
-      'invited',
-      'suspended',
-    ]),
-    role: faker.helpers.arrayElement([
-      'admin',
-      'staff',
-    ]),
-    createdAt: faker.date.past(),
-    updatedAt: faker.date.recent(),
+export let users: User[] = [];
+
+export const fetchUsers = async () => {
+  try {
+    const fetchedUsers = await getAllUsers();
+
+    // Log the fetched data to debug and inspect its structure
+    // eslint-disable-next-line no-console
+    console.log("Fetched users:", fetchedUsers);
+
+    // Parse and validate the fetched data using Zod schema
+    users = userListSchema.parse(fetchedUsers); // Validate and assign users
+  } catch (error) {
+    // Catch any errors during fetch or parsing
+    // eslint-disable-next-line no-console
+    console.error("Failed to fetch users:", error);
+
+    // Handle missing or invalid data gracefully
+    if (error instanceof Error) {
+      // If it's a Zod error, handle it as such
+      if (error.name === "ZodError") {
+        // eslint-disable-next-line no-console
+        console.error("Validation error:", error);
+      }
+    }
+
+    // Set users to an empty array if an error occurs
+    users = [];
   }
-})
+};
+
+// Fetch users when the module is imported
+fetchUsers();
