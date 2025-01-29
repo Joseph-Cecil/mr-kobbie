@@ -8,7 +8,7 @@ export const loginUser = async (staffId: string, password: string) => {
 
 // Register
 export const registerUser = async (data: string) => {
-  const response = await apiClient.post("/auth/register", data);
+  const response = await apiClient.post("http://localhost:5000/api/auth/register", data);
   return response.data;
 };
 
