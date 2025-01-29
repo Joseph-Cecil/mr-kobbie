@@ -5,16 +5,15 @@ import { useUsers } from '../context/users-context'
 export function UsersPrimaryButtons() {
   const { setOpen } = useUsers()
   return (
-    <div className='flex gap-2'>
+    <div className="flex gap-2">
       <Button
-        style={{color:'whitesmoke'}}
-        variant='outline'
-        className='space-x-1'
+        variant="outline"
+        className="space-x-1 text-black dark:text-[whitesmoke]" // Black in light mode, whitesmoke in dark mode
         onClick={() => setOpen('invite')}
       >
         <span>Set Interest</span> <IconMailPlus size={18} />
       </Button>
-      <Button style={{color:'whitesmoke'}} className='space-x-1' onClick={() => setOpen('add')}>
+      <Button className="space-x-1 text-black dark:text-[whitesmoke]" onClick={() => setOpen('add')}>
         <span>Register Staff</span> <IconUserPlus size={18} />
       </Button>
     </div>

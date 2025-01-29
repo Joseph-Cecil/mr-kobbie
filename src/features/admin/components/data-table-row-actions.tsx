@@ -38,7 +38,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
               setOpen('edit')
             }}
           >
-            Edit
+            Reset Password
             <DropdownMenuShortcut>
               <IconEdit size={16} />
             </DropdownMenuShortcut>
