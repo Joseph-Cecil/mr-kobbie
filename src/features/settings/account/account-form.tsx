@@ -57,16 +57,14 @@ export function AccountForm() {
     newPassword: string;
     confirmNewPassword: string;
   }> = async (values) => {
-    setIsLoading(true); // Start loading
+    setIsLoading(true); 
     try {
       await changePassword(values.oldPassword, values.newPassword);
 
-      // Show success toast
       
 
-      passwordForm.reset(); // Reset the form
+      passwordForm.reset();
 
-      // Redirect to homepage after a short delay
       setTimeout(() => navigate({ to: "/" }), 1000);
       
       toast.success("Password changed successfully!", {

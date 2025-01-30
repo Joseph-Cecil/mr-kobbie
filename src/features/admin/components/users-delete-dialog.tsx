@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { IconAlertTriangle } from '@tabler/icons-react';
-import { toast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ConfirmDialog } from '@/components/confirm-dialog';
 import { User } from '../data/schema';
-import { deleteUser } from "../../../api/adminApi"; // Import deleteUser from API client
+import { deleteUser } from "../../../api/adminApi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Props {
   open: boolean;
@@ -15,6 +16,7 @@ interface Props {
   refetchUsers: () => void; // Add refetchUsers to refresh user list after deletion
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function UsersDeleteDialog({ open, onOpenChange, currentRow, refetchUsers }: Props) {
   const [value, setValue] = useState('');
 
@@ -28,27 +30,34 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow, refetchUsers
       // Close the dialog
       onOpenChange(false);
 
-      // Toast notification
-      toast({
-        title: 'Success!',
-        description: `User ${currentRow.firstName} ${currentRow.lastName} has been deleted.`,
+      toast.success("Staff Deleted successfully!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       });
 
-      // Refetch users to update the UI
-      refetchUsers();
     } catch (error) {
       // Handle error
       // eslint-disable-next-line no-console
       console.log(error);
-      toast({
-        title: 'Error!',
-        description: 'Failed to delete user.',
-        variant: 'destructive',
-      });
+        toast.error("Failed to delete Staff.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
     }
   };
 
   return (
+    <><ToastContainer />
     <ConfirmDialog
       open={open}
       onOpenChange={onOpenChange}
@@ -77,11 +86,11 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow, refetchUsers
           </p>
 
           <Label className='my-2'>
-            Username:
+            Staff ID:
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder='Enter username to confirm deletion.'
+              placeholder='Enter staff ID to confirm deletion.'
             />
           </Label>
 
@@ -95,6 +104,6 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow, refetchUsers
       }
       confirmText='Delete'
       destructive
-    />
+    /></>
   );
 }
