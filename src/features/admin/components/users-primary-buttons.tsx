@@ -8,7 +8,7 @@ export function UsersPrimaryButtons() {
     <div className="flex gap-2">
       <Button
         variant="outline"
-        className="space-x-1 text-black dark:text-[whitesmoke]" // Black in light mode, whitesmoke in dark mode
+        className="space-x-1 text-black dark:text-[whitesmoke]" 
         onClick={() => setOpen('invite')}
       >
         <span>Set Interest</span> <IconMailPlus size={18} />
