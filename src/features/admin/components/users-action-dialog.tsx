@@ -153,7 +153,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
 
   if(loading) {
     return (
-      <div>Loading</div>
+      <div>Loading ..</div>
     )
   }
 

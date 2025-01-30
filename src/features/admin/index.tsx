@@ -11,6 +11,7 @@ import { UsersTable } from "./components/users-table";
 import UsersProvider from "./context/users-context";
 import { userListSchema, User } from "./data/schema";
 import { getAllUsers } from "../../api/adminApi";
+import { UsersTableSkeleton } from "./components/TableSkeleton";
 
 export default function Admin() {
   const [users, setUsers] = useState<User[]>([]); // Store users in state
@@ -38,7 +39,11 @@ export default function Admin() {
     fetchUsers(); // Call the function when component mounts
   }, []); // Empty dependency array ensures it runs only once
 
-  if (loading) return <p>Loading users...</p>;
+  if (loading) return (
+    <div>
+      <UsersTableSkeleton columns={9}/>
+    </div>
+  );
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (

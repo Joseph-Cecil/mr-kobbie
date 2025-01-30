@@ -22,7 +22,7 @@ export function UsersDialogs() {
       {currentRow && (
         <>
           <UsersActionDialog
-            key={`user-edit-${currentRow.id}`}
+            key={`user-edit-${currentRow._id}`}
             open={open === 'edit'}
             onOpenChange={() => {
               setOpen('edit')
@@ -34,16 +34,17 @@ export function UsersDialogs() {
           />
 
           <UsersDeleteDialog
-            key={`user-delete-${currentRow.id}`}
+            key={`user-delete-${currentRow._id}`}
             open={open === 'delete'}
             onOpenChange={() => {
               setOpen('delete')
               setTimeout(() => {
                 setCurrentRow(null)
               }, 500)
-            }}
-            currentRow={currentRow}
-          />
+            } }
+            currentRow={currentRow} refetchUsers={function (): void {
+              throw new Error('Function not implemented.')
+            } }          />
         </>
       )}
     </>

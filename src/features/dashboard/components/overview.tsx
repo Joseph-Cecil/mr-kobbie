@@ -9,15 +9,15 @@ const generateYearlyData = () => {
 };
 
 const yearlyData = {
+  2020: generateYearlyData(),
   2021: generateYearlyData(),
   2022: generateYearlyData(),
   2023: generateYearlyData(),
   2024: generateYearlyData(),
-  2025: generateYearlyData(),
 };
 
 export function Overview() {
-  const [selectedYear, setSelectedYear] = useState<keyof typeof yearlyData>(2025);
+  const [selectedYear, setSelectedYear] = useState<keyof typeof yearlyData>(2024);
 
   return (
     <div className="relative flex flex-col sm:flex-row sm:items-start">

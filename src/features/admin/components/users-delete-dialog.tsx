@@ -1,38 +1,52 @@
-'use client'
-
-import { useState } from 'react'
-import { IconAlertTriangle } from '@tabler/icons-react'
-import { toast } from '@/hooks/use-toast'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { ConfirmDialog } from '@/components/confirm-dialog'
-import { User } from '../data/schema'
+import { useState } from "react";
+import { IconAlertTriangle } from '@tabler/icons-react';
+import { toast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ConfirmDialog } from '@/components/confirm-dialog';
+import { User } from '../data/schema';
+import { deleteUser } from "../../../api/adminApi"; // Import deleteUser from API client
 
 interface Props {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  currentRow: User
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  currentRow: User;
+  refetchUsers: () => void; // Add refetchUsers to refresh user list after deletion
 }
 
-export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
-  const [value, setValue] = useState('')
+export function UsersDeleteDialog({ open, onOpenChange, currentRow, refetchUsers }: Props) {
+  const [value, setValue] = useState('');
 
-  const handleDelete = () => {
-    if (value.trim() !== currentRow.staffId) return
+  const handleDelete = async () => {
+    if (value.trim() !== currentRow.staffId) return;
 
-    onOpenChange(false)
-    toast({
-      title: 'The following user has been deleted:',
-      description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>
-            {JSON.stringify(currentRow, null, 2)}
-          </code>
-        </pre>
-      ),
-    })
-  }
+    try {
+      // Delete the user by calling the deleteUser API function
+      await deleteUser(currentRow._id);
+      
+      // Close the dialog
+      onOpenChange(false);
+
+      // Toast notification
+      toast({
+        title: 'Success!',
+        description: `User ${currentRow.firstName} ${currentRow.lastName} has been deleted.`,
+      });
+
+      // Refetch users to update the UI
+      refetchUsers();
+    } catch (error) {
+      // Handle error
+      // eslint-disable-next-line no-console
+      console.log(error);
+      toast({
+        title: 'Error!',
+        description: 'Failed to delete user.',
+        variant: 'destructive',
+      });
+    }
+  };
 
   return (
     <ConfirmDialog
@@ -74,7 +88,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
           <Alert variant='destructive'>
             <AlertTitle>Warning!</AlertTitle>
             <AlertDescription>
-              Please be carefull, this operation can not be rolled back.
+              Please be careful, this operation cannot be rolled back.
             </AlertDescription>
           </Alert>
         </div>
@@ -82,5 +96,5 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       confirmText='Delete'
       destructive
     />
-  )
+  );
 }

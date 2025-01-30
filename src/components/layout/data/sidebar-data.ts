@@ -2,6 +2,7 @@ import {
   IconCalendar,
   IconChecklist,
   IconLayoutDashboard,
+  IconManualGearbox,
   IconNotification,
   IconPalette,
   IconReportAnalytics,
@@ -9,6 +10,7 @@ import {
   IconShoppingBagDiscount,
   IconTool,
   IconUserCog,
+  IconUsersGroup,
 } from '@tabler/icons-react'
 import { type SidebarData } from '../types'
 
@@ -55,7 +57,25 @@ export const sidebarData: SidebarData = {
         },
       ],
     },
-    
+
+     {
+      title: 'Administrator',
+      items: [
+        {
+          title: 'Manage Application',
+          icon: IconManualGearbox,
+          items: [
+            {
+              title: 'Manage Staff',
+              url: '/admin',
+              icon: IconUsersGroup,
+            },
+        
+          ],
+        },
+        
+      ],
+    },
     {
       title: 'Other',
       items: [

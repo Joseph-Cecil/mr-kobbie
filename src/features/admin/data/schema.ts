@@ -7,7 +7,7 @@ const userRoleSchema = z.union([
 
 // Adjust schema to expect _id instead of id and map it
 const userSchema = z.object({
-  id: z.string().optional(), // id is optional here
+  _id: z.string(), // id is optional here
   firstName: z.string(),
   lastName: z.string(),
   staffId: z.string(),
@@ -20,7 +20,7 @@ const userSchema = z.object({
 export const userListSchema = z.array(
   userSchema.transform((data) => ({
     ...data,
-    _id: data.id,  // Rename _id to id
+    id: data._id,  // Rename _id to id
   }))
 );
 
