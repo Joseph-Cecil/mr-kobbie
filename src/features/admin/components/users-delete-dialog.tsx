@@ -18,14 +18,18 @@ interface Props {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function UsersDeleteDialog({ open, onOpenChange, currentRow, refetchUsers }: Props) {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(0);
 
   const handleDelete = async () => {
-    if (value.trim() !== currentRow.staffId) return;
+    if (value !== currentRow.staffId) return;
 
     try {
       // Delete the user by calling the deleteUser API function
-      await deleteUser(currentRow._id);
+      if (currentRow._id) {
+        await deleteUser(currentRow._id);
+      } else {
+        throw new Error("User ID is undefined");
+      }
       
       // Close the dialog
       onOpenChange(false);
@@ -62,7 +66,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow, refetchUsers
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentRow.staffId}
+      disabled={value !== currentRow.staffId}
       title={
         <span className='text-destructive'>
           <IconAlertTriangle
@@ -89,7 +93,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow, refetchUsers
             Staff ID:
             <Input
               value={value}
-              onChange={(e) => setValue(e.target.value)}
+              onChange={(e) => setValue(Number(e.target.value))}
               placeholder='Enter staff ID to confirm deletion.'
             />
           </Label>

@@ -5,23 +5,27 @@ const userRoleSchema = z.union([
   z.literal('staff'),
 ]);
 
-// Adjust schema to expect _id instead of id and map it
+
 const userSchema = z.object({
-  _id: z.string(), // id is optional here
-  firstName: z.string(),
-  lastName: z.string(),
-  staffId: z.string(),
+  id: z.string().optional(),
+  firstName: z.string().min(1, { message: "Required" }),
+  lastName: z.string().min(1, { message: "Required" }),
+  staffId: z.number({ required_error: "Staff ID is required" }),
   role: userRoleSchema,
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  _id: z.string().optional(),
+  staffData: z.any().nullable(), // Allow `null` values
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
 });
+
 
 // Extend the schema with a transform to rename _id to id
 export const userListSchema = z.array(
   userSchema.transform((data) => ({
     ...data,
-    id: data._id,  // Rename _id to id
+    id: data._id ?? data.id,  // Preserve existing `id` if `_id` is missing
   }))
 );
+
 
 export type User = z.infer<typeof userSchema>;

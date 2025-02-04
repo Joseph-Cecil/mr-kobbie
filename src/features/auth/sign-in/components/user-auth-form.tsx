@@ -20,7 +20,13 @@ import { loginUser } from "@/api/authApi";
 type UserAuthFormProps = HTMLAttributes<HTMLDivElement>;
 
 const formSchema = z.object({
-  staffId: z.string().min(1, { message: "Please enter your staff Id" }),
+  staffId: z
+    .string()
+    .min(1, { message: "Please enter your staff Id" })
+    .transform((val) => Number(val))
+    .refine((val) => !isNaN(val) && val > 0, {
+      message: "Staff Id must be a valid number",
+    }),
   password: z
     .string()
     .min(1, { message: "Please enter your password" })
@@ -35,7 +41,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      staffId: "",
+      staffId: 0,
       password: "",
     },
   });

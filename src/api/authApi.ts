@@ -1,19 +1,19 @@
 import apiClient from "../utils/apiClient";
 
 // Login
-export const loginUser = async (staffId: string, password: string) => {
+export const loginUser = async (staffId: number, password: string) => {
   const response = await apiClient.post("http://localhost:5000/api/auth/login", { staffId, password });
   return response.data;
 };
 
 // Register
-export const registerUser = async (data: string) => {
+export const registerUser = async (data: string | number) => {
   const response = await apiClient.post("http://localhost:5000/api/auth/register", data);
   return response.data;
 };
 
 // Reset Password
-export const resetPassword = async (staffId: string, newPassword: string) => {
+export const resetPassword = async (staffId: number, newPassword: string) => {
   try {
     const response = await apiClient.put(`http://localhost:5000/api/auth/reset-password`, { staffId, newPassword });
   return response.data;

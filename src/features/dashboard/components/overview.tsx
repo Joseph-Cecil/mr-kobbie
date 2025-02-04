@@ -1,31 +1,53 @@
-import { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { fetchStaffData } from '@/api/userApi'; 
+import { useEffect, useState } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
-const generateYearlyData = () => {
-  return Array.from({ length: 12 }, (_, index) => ({
-    name: new Date(0, index).toLocaleString('en', { month: 'short' }),
-    total: Math.floor(Math.random() * 5000) + 1000,
-  }));
-};
-
-const yearlyData = {
-  2020: generateYearlyData(),
-  2021: generateYearlyData(),
-  2022: generateYearlyData(),
-  2023: generateYearlyData(),
-  2024: generateYearlyData(),
-  2025: generateYearlyData(),
-};
+const months = [
+  "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+  "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
+];
 
 export function Overview() {
-  const [selectedYear, setSelectedYear] = useState<keyof typeof yearlyData>(2025);
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  const [staff, setStaff] = useState(null);
+  const [yearlyData, setYearlyData] = useState<Record<number, { name: string; total: number }[]>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadStaffData = async () => {
+      try {
+        const data = await fetchStaffData();
+        setStaff(data);
+
+        // Transform contributions into chart data
+        const contributions = data?.contributions || {};
+        const transformedData = months.map(month => ({
+          name: month.slice(0, 3), // Shortened Month (e.g., "JAN")
+          total: contributions[month] || 0, // Default to 0 if no data
+        }));
+
+        setYearlyData({ [selectedYear]: transformedData });
+      } catch (err) {
+        setError("Failed to load staff data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStaffData();
+  }, [selectedYear]);
+
+  if (loading) return <p>Loading staff data...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div className="relative flex flex-col sm:flex-row sm:items-start">
       {/* Chart */}
       <div className="flex-1">
         <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={yearlyData[selectedYear]}>
+          <BarChart data={yearlyData[selectedYear] || []}>
             <XAxis
               dataKey="name"
               stroke="#888888"
@@ -52,13 +74,13 @@ export function Overview() {
 
       {/* Year Selector */}
       <div className="sm:ml-4 mt-4 sm:mt-0 flex sm:flex-col sm:space-y-2 space-x-2 sm:space-x-0">
-        {Object.keys(yearlyData).map((year) => (
+        {[selectedYear].map((year) => (
           <button
             key={year}
-            onClick={() => setSelectedYear(year as unknown as keyof typeof yearlyData)}
+            onClick={() => setSelectedYear(year)}
             className={`text-sm px-2 py-1 rounded-lg ${
-              Number(year) === selectedYear
-                ? 'bg-primary text-blue'
+              year === selectedYear
+                ? 'bg-primary text-white'
                 : 'bg-gray-200 dark:bg-neutral-800 text-black dark:text-white'
             }`}
           >

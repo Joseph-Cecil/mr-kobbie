@@ -6,3 +6,14 @@ export const fetchUserProfile = async () => {
     const response = await apiClient.get("http://localhost:5000/api/user/profile");
     return response.data;
   };
+
+export const fetchStaffData = async () => {
+    try {
+        const response = await apiClient.get("http://localhost:5000/api/user/staff-data");
+        return response.data;
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error("Error fetching staff data:", error);
+        throw error;
+    }
+};

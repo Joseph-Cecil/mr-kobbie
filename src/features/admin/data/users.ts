@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { getAllUsers } from "../../../api/adminApi";
 import { userListSchema, User } from "./schema";
 
@@ -6,6 +7,23 @@ export let users: User[] = [];
 export const fetchUsers = async () => {
   try {
     const fetchedUsers = await getAllUsers();
+
+// Ensure API returns an array, otherwise handle the error
+if (!Array.isArray(fetchedUsers)) {
+  console.error("API response is not an array:", fetchedUsers);
+  users = [];
+  return;
+}
+const filteredUsers = fetchedUsers.filter(
+  (user) => user.firstName && user.lastName && typeof user.staffId === "number"
+);
+
+if (filteredUsers.length !== fetchedUsers.length) {
+  console.warn("Some users were missing required fields and were filtered out.");
+}
+
+users = userListSchema.parse(filteredUsers);
+
 
     // Log the fetched data to debug and inspect its structure
     // eslint-disable-next-line no-console
