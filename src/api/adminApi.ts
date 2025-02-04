@@ -19,6 +19,16 @@ export const uploadStaffData = async (staffDataArray: unknown[]) => {
   }
 };
 
+export const setInterest = async (interest: number) => {
+  try {
+    const response = await apiClient.post("http://localhost:5000/api/admin/set-interest", {interest});
+    return response.data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }catch (error: any) {
+    throw error.response ? error.response.data : error.message;
+  }
+}
+
 
 
 uploadStaffData(staffDataArray)

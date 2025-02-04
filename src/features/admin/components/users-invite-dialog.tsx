@@ -1,7 +1,8 @@
 import { z } from 'zod'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {IconPencil, IconSend } from '@tabler/icons-react'
+import { IconPencil, IconSend } from '@tabler/icons-react'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,37 +21,54 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { SelectDropdown } from '@/components/select-dropdown'
-import { userTypes } from '../data/data'
+import { setInterest } from '../../../api/adminApi'
+import { Input } from '@/components/ui/input'
 
+// Form schema
 const formSchema = z.object({
-  rate: z.string().min(1, { message: 'Role is required.' }),
-  desc: z.string().optional(),
+  interest: z
+    .number({
+      invalid_type_error: 'Interest must be a number.',
+    })
+    .min(1, { message: 'New interest rate is required.' }),
 })
-type UserInviteForm = z.infer<typeof formSchema>
 
+// Props interface
 interface Props {
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
 export function UsersInviteDialog({ open, onOpenChange }: Props) {
-  const form = useForm<UserInviteForm>({
+  const [loading, setLoading] = useState(false)
+
+  const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {rate: '', desc: '' },
+    defaultValues: { interest: 1 },
   })
 
-  const onSubmit = (values: UserInviteForm) => {
-    form.reset()
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
-    })
-    onOpenChange(false)
+  const onSubmit = async (values: { interest: number }) => {
+    setLoading(true)
+
+    try {
+      await setInterest(values.interest) // Ensure it's a number
+
+      toast({
+        title: 'Success!',
+        description: 'Interest rate updated successfully.',
+      })
+
+      form.reset()
+      onOpenChange(false)
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error as string,
+        variant: 'destructive',
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -70,46 +88,24 @@ export function UsersInviteDialog({ open, onOpenChange }: Props) {
             Set Interest Rate For All Staff Here.
           </DialogDescription>
         </DialogHeader>
+
         <Form {...form}>
           <form
             id='user-invite-form'
             onSubmit={form.handleSubmit(onSubmit)}
             className='space-y-4'
           >
-         
             <FormField
               control={form.control}
-              name='rate'
+              name='interest'
               render={({ field }) => (
                 <FormItem className='space-y-1'>
-                  <FormLabel>Role</FormLabel>
-                  <SelectDropdown
-                    defaultValue={field.value}
-                    onValueChange={field.onChange}
+                  <FormLabel>Interest</FormLabel>
+                  <Input
+                    type="number" // Ensures numeric input
+                    value={field.value} // Ensures controlled input
+                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)} // Convert input to number
                     placeholder='Enter Interest Rate'
-                    items={userTypes.map(({ label, value }) => ({
-                      label,
-                      value,
-                    }))}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-           <FormField
-              control={form.control}
-              name='rate'
-              render={({ field }) => (
-                <FormItem className='space-y-1'>
-                  <FormLabel>Role</FormLabel>
-                  <SelectDropdown
-                    defaultValue={field.value}
-                    onValueChange={field.onChange}
-                    placeholder='Enter Interest Rate'
-                    items={userTypes.map(({ label, value }) => ({
-                      label,
-                      value,
-                    }))}
                   />
                   <FormMessage />
                 </FormItem>
@@ -117,12 +113,15 @@ export function UsersInviteDialog({ open, onOpenChange }: Props) {
             />
           </form>
         </Form>
+
         <DialogFooter className='gap-y-2'>
           <DialogClose asChild>
-            <Button style={{color:"whitesmoke"}} variant='outline'>Cancel</Button>
+            <Button className="space-x-1 text-black dark:text-[whitesmoke]" variant='outline' disabled={loading}>
+              Cancel
+            </Button>
           </DialogClose>
-          <Button style={{color:"whitesmoke"}} type='submit' form='user-invite-form'>
-            Set Interest <IconSend />
+          <Button className="space-x-1 text-black dark:text-[whitesmoke]" type='submit' form='user-invite-form' disabled={loading}>
+            {loading ? 'Saving...' : 'Set Interest'} <IconSend />
           </Button>
         </DialogFooter>
       </DialogContent>

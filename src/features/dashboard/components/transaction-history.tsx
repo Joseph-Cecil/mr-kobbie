@@ -21,7 +21,6 @@ export function RecentSales() {
       <div className='flex items-center gap-4'>
         <Avatar className='flex h-9 w-9 items-center justify-center space-y-0 border'>
           <AvatarImage src='/avatars/02.png' alt='Avatar' />
-          <AvatarFallback>JL</AvatarFallback>
         </Avatar>
         <div className='flex flex-1 flex-wrap items-center justify-between'>
           <div className='space-y-1'>
