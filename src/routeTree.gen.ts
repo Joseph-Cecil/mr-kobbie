@@ -33,6 +33,9 @@ const authForgotPasswordLazyImport = createFileRoute(
 const AuthenticatedSettingsRouteLazyImport = createFileRoute(
   '/_authenticated/settings',
 )()
+const AuthenticatedUploadExcelIndexLazyImport = createFileRoute(
+  '/_authenticated/upload-excel/',
+)()
 const AuthenticatedTrackLoanIndexLazyImport = createFileRoute(
   '/_authenticated/track-loan/',
 )()
@@ -167,6 +170,17 @@ const auth500Route = auth500Import.update({
   path: '/500',
   getParentRoute: () => rootRoute,
 } as any)
+
+const AuthenticatedUploadExcelIndexLazyRoute =
+  AuthenticatedUploadExcelIndexLazyImport.update({
+    id: '/upload-excel/',
+    path: '/upload-excel/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/upload-excel/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthenticatedTrackLoanIndexLazyRoute =
   AuthenticatedTrackLoanIndexLazyImport.update({
@@ -472,6 +486,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTrackLoanIndexLazyImport
       parentRoute: typeof AuthenticatedRouteImport
     }
+    '/_authenticated/upload-excel/': {
+      id: '/_authenticated/upload-excel/'
+      path: '/upload-excel'
+      fullPath: '/upload-excel'
+      preLoaderRoute: typeof AuthenticatedUploadExcelIndexLazyImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
   }
 }
 
@@ -513,6 +534,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRepaymentScheduleIndexLazyRoute: typeof AuthenticatedRepaymentScheduleIndexLazyRoute
   AuthenticatedReportIndexLazyRoute: typeof AuthenticatedReportIndexLazyRoute
   AuthenticatedTrackLoanIndexLazyRoute: typeof AuthenticatedTrackLoanIndexLazyRoute
+  AuthenticatedUploadExcelIndexLazyRoute: typeof AuthenticatedUploadExcelIndexLazyRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -528,6 +550,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedRepaymentScheduleIndexLazyRoute,
   AuthenticatedReportIndexLazyRoute: AuthenticatedReportIndexLazyRoute,
   AuthenticatedTrackLoanIndexLazyRoute: AuthenticatedTrackLoanIndexLazyRoute,
+  AuthenticatedUploadExcelIndexLazyRoute:
+    AuthenticatedUploadExcelIndexLazyRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -558,6 +582,7 @@ export interface FileRoutesByFullPath {
   '/report': typeof AuthenticatedReportIndexLazyRoute
   '/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/track-loan': typeof AuthenticatedTrackLoanIndexLazyRoute
+  '/upload-excel': typeof AuthenticatedUploadExcelIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -583,6 +608,7 @@ export interface FileRoutesByTo {
   '/report': typeof AuthenticatedReportIndexLazyRoute
   '/settings': typeof AuthenticatedSettingsIndexLazyRoute
   '/track-loan': typeof AuthenticatedTrackLoanIndexLazyRoute
+  '/upload-excel': typeof AuthenticatedUploadExcelIndexLazyRoute
 }
 
 export interface FileRoutesById {
@@ -612,6 +638,7 @@ export interface FileRoutesById {
   '/_authenticated/report/': typeof AuthenticatedReportIndexLazyRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/_authenticated/track-loan/': typeof AuthenticatedTrackLoanIndexLazyRoute
+  '/_authenticated/upload-excel/': typeof AuthenticatedUploadExcelIndexLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -641,6 +668,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/settings/'
     | '/track-loan'
+    | '/upload-excel'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/500'
@@ -665,6 +693,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/settings'
     | '/track-loan'
+    | '/upload-excel'
   id:
     | '__root__'
     | '/_authenticated'
@@ -692,6 +721,7 @@ export interface FileRouteTypes {
     | '/_authenticated/report/'
     | '/_authenticated/settings/'
     | '/_authenticated/track-loan/'
+    | '/_authenticated/upload-excel/'
   fileRoutesById: FileRoutesById
 }
 
@@ -757,7 +787,8 @@ export const routeTree = rootRoute
         "/_authenticated/hire-purchase/",
         "/_authenticated/repayment-schedule/",
         "/_authenticated/report/",
-        "/_authenticated/track-loan/"
+        "/_authenticated/track-loan/",
+        "/_authenticated/upload-excel/"
       ]
     },
     "/(auth)/500": {
@@ -851,6 +882,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/track-loan/": {
       "filePath": "_authenticated/track-loan/index.lazy.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/upload-excel/": {
+      "filePath": "_authenticated/upload-excel/index.lazy.tsx",
       "parent": "/_authenticated"
     }
   }

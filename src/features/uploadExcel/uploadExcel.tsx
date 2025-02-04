@@ -1,0 +1,94 @@
+"use client";
+import React, { useState } from "react";
+import { FileUpload } from "@/components/ui/file-upload";
+import { Button } from "@/components/ui/button";
+import * as XLSX from "xlsx";
+
+
+export function UploadExcelPage() {
+  const [files, setFiles] = useState<File[]>([]);
+  const [jsonData, setJsonData] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+
+  const handleFileUpload = (uploadedFiles: File[]) => {
+    setFiles(uploadedFiles);
+  };
+
+  const previewData = () => {
+    if (files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target?.result;
+        if (data) {
+          const workbook = XLSX.read(data, { type: "binary" });
+          const sheetName = workbook.SheetNames[0];
+          const workSheet = workbook.Sheets[sheetName];
+          const json = XLSX.utils.sheet_to_json(workSheet);
+          setJsonData(JSON.stringify(json, null, 2));
+        }
+      };
+      reader.readAsBinaryString(file);
+    }
+  };
+
+  const pushToDatabase = async () => {
+    if (files.length > 0) {
+      setLoading(true);
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const data = e.target?.result;
+        if (data) {
+          const workbook = XLSX.read(data, { type: "binary" });
+          const sheetName = workbook.SheetNames[0];
+          const workSheet = workbook.Sheets[sheetName];
+          const json = XLSX.utils.sheet_to_json(workSheet);
+          try {
+            await createBulkUsers(json);
+            setLoading(false);
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+            setLoading(false);
+          }
+        }
+      };
+      reader.readAsBinaryString(file);
+    }
+  };
+
+  return (
+    <>
+      <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-background border-neutral-200 dark:border-neutral-800 rounded-lg">
+        <FileUpload onChange={handleFileUpload} />
+      </div>
+      <div className="flex gap-10 justify-center mt-10">
+        <Button
+          variant="outline"
+          className="space-x-1 text-black dark:text-[whitesmoke]"
+          onClick={previewData}
+        >
+          <span>Preview File</span>
+        </Button>
+        <Button
+          className="space-x-1 text-white dark:text-[whitesmoke]"
+          onClick={pushToDatabase}
+          disabled={loading}
+        >
+          <span>{loading ? "Pushing..." : "Push to Database"}</span>
+        </Button>
+      </div>
+      {jsonData && (
+        <pre className="mt-5 p-4 bg-gray-100 dark:bg-gray-800 rounded-md">
+          {jsonData}
+        </pre>
+      )}
+    </>
+  );
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+function createBulkUsers(json: any) {
+  throw new Error("Function not implemented.");
+}
+

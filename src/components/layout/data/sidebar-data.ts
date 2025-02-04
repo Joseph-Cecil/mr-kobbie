@@ -3,8 +3,8 @@ import {
   IconChecklist,
   IconLayoutDashboard,
   IconManualGearbox,
-  IconNotification,
-  IconPalette,
+  // IconNotification,
+  // IconPalette,
   IconReportAnalytics,
   IconSettings,
   IconShoppingBagDiscount,
@@ -70,6 +70,11 @@ export const sidebarData: SidebarData = {
               url: '/admin',
               icon: IconUsersGroup,
             },
+            {
+              title: 'Upload Data',
+              url: '/upload-excel',
+              icon: IconUsersGroup,
+            }
         
           ],
         },
@@ -93,16 +98,16 @@ export const sidebarData: SidebarData = {
               url: '/settings/account',
               icon: IconTool,
             },
-            {
-              title: 'Appearance',
-              url: '/settings/appearance',
-              icon: IconPalette,
-            },
-            {
-              title: 'Notifications',
-              url: '/settings/notifications',
-              icon: IconNotification,
-            },
+            // {
+            //   title: 'Appearance',
+            //   url: '/settings/appearance',
+            //   icon: IconPalette,
+            // },
+            // {
+            //   title: 'Notifications',
+            //   url: '/settings/notifications',
+            //   icon: IconNotification,
+            // },
         
           ],
         },
