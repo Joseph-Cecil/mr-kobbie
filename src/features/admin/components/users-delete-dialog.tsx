@@ -16,8 +16,7 @@ interface Props {
   refetchUsers: () => void; // Add refetchUsers to refresh user list after deletion
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function UsersDeleteDialog({ open, onOpenChange, currentRow, refetchUsers }: Props) {
+export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const [value, setValue] = useState(0);
 
   const handleDelete = async () => {

@@ -1,8 +1,5 @@
 import { Outlet } from '@tanstack/react-router'
 import {
-  IconBrowserCheck,
-  IconNotification,
-  IconPalette,
   IconTool,
   IconUser,
 } from '@tabler/icons-react'
@@ -59,20 +56,5 @@ const sidebarNavItems = [
     title: 'Change Password',
     icon: <IconTool size={18} />,
     href: '/settings/account',
-  },
-  {
-    title: 'Appearance',
-    icon: <IconPalette size={18} />,
-    href: '/settings/appearance',
-  },
-  {
-    title: 'Notifications',
-    icon: <IconNotification size={18} />,
-    href: '/settings/notifications',
-  },
-  {
-    title: 'Display',
-    icon: <IconBrowserCheck size={18} />,
-    href: '/settings/display',
-  },
+  }
 ]

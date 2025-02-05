@@ -9,6 +9,7 @@ import {
   IconSettings,
   IconShoppingBagDiscount,
   IconTool,
+  IconUpload,
   IconUserCog,
   IconUsersGroup,
 } from '@tabler/icons-react'
@@ -73,7 +74,7 @@ export const sidebarData: SidebarData = {
             {
               title: 'Upload Data',
               url: '/upload-excel',
-              icon: IconUsersGroup,
+              icon: IconUpload,
             }
         
           ],
