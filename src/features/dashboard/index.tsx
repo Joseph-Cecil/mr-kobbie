@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,14 +17,14 @@ import { ThemeSwitch } from '@/components/theme-switch'
 import { Overview } from './components/overview'
 import { RecentSales } from './components/transaction-history'
 import { useNavigate } from '@tanstack/react-router'
-import { fetchStaffData } from '@/api/userApi'
+import { fetchStaffData, getInterest } from '@/api/userApi'
 
 export default function Dashboard() {
-  const navigate = useNavigate()
-  const [totalContributions, setTotalContributions] = useState(0)
-  const [partialWithdrawal, setPartialWithdrawal] = useState(0)
-  const [loanAccess, setLoanAccess] = useState(0)
-  const [requestedLoans, setRequestedLoans] = useState(0)
+  const navigate = useNavigate();
+  const [totalContributions, setTotalContributions] = useState(0);
+  const [partialWithdrawal, setPartialWithdrawal] = useState(0);
+  const [loanAccess, setLoanAccess] = useState(0);
+  const [interestRate, setInterestRate] = useState<number | null>(null); // New state for interest rate
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,25 +32,31 @@ export default function Dashboard() {
         const data = await fetchStaffData();
 
         if (data && data.contributions) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const total = data.totalContribution
-          setTotalContributions(total)
-          setPartialWithdrawal(total * 0.5) // Assuming partial withdrawal is 50% of contributions
-          setLoanAccess(total * 5) // Assuming loan access is 5 times total contributions
-          setRequestedLoans(data.requestedLoans || 0) // Assuming API provides requested loans
+          const total = data.totalContribution;
+          setTotalContributions(total);
+          setPartialWithdrawal(total * 0.5); // 50% of contributions
+          setLoanAccess(total * 5); // 5 times total contributions
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Error fetching staff data:', error)
+        console.error('Error fetching staff data:', error);
       }
-    }
+    };
 
-    fetchData()
-  }, [])
+    // Fetch the interest rate
+    const fetchInterestRate = async () => {
+      try {
+        const interestData = await getInterest(); // Fetch interest rate
+        if (interestData && interestData.interest) {
+          setInterestRate(interestData.interest); // Update state
+        }
+      } catch (error) {
+        console.error('Error fetching interest rate:', error);
+      }
+    };
 
-  const handleGoToReports = () => {
-    navigate({ to: "/report" })
-  }
+    fetchData();
+    fetchInterestRate(); // Fetch interest rate on mount
+  }, []);
 
   return (
     <>
@@ -65,7 +72,7 @@ export default function Dashboard() {
         <div className="mb-2 -mt-7 flex flex-col items-start space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <h1 className="text-xl font-bold tracking-tight sm:text-2xl">Staff Dashboard</h1>
           <div className="flex flex-wrap items-center space-x-2 sm:flex-nowrap">
-            <Button style={{ color: 'whitesmoke' }} onClick={handleGoToReports}>
+            <Button style={{ color: 'whitesmoke' }} onClick={() => navigate({ to: "/report" })}>
               Go To Reports
             </Button>
           </div>
@@ -79,7 +86,7 @@ export default function Dashboard() {
           </div>
           <TabsContent value='overview' className='space-y-4'>
             <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-              
+
               {/* Total Contributions */}
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
@@ -87,7 +94,7 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className='text-2xl font-bold'>₵{totalContributions.toFixed(2)}</div>
-                  <p className='text-xs text-muted-foreground'>Updated data from API</p>
+                  <p className='text-xs text-muted-foreground'>Yearly Total Contribution.</p>
                 </CardContent>
               </Card>
 
@@ -113,16 +120,16 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
 
-              {/* Requested Loans */}
+              {/* Interest Rate */}
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='text-sm font-medium'># Requested Loans</CardTitle>
+                  <CardTitle className='text-sm font-medium'># Interest Rate</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>+{requestedLoans}</div>
-                  <p className='text-xs text-muted-foreground'>
-                    {requestedLoans > 0 ? 'Loans requested' : 'No loans requested'}
-                  </p>
+                  <div className='text-2xl font-bold'>
+                    {interestRate !== null ? `${interestRate}%` : 'Loading...'}
+                  </div>
+                  <p className='text-xs text-muted-foreground'>Current Interest Rate</p>
                 </CardContent>
               </Card>
 
@@ -152,5 +159,5 @@ export default function Dashboard() {
         </Tabs>
       </Main>
     </>
-  )
+  );
 }
