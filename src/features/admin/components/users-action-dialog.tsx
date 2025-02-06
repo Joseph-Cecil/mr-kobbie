@@ -35,7 +35,7 @@ const formSchema = z
   .object({
     firstName: z.string().min(1, { message: 'First Name is required.' }),
     lastName: z.string().min(1, { message: 'Last Name is required.' }),
-    staffId: z.number().min(1, { message: 'StaffId is required.' }),
+    staffId: z.coerce.number({ required_error: "Staff ID is required" }),
     password: z.string().transform((pwd) => pwd.trim()),
     role: z.string().min(1, { message: 'Role is required.' }),
     confirmPassword: z.string().transform((pwd) => pwd.trim()),
