@@ -18,6 +18,7 @@ import { Overview } from './components/overview'
 import { RecentSales } from './components/transaction-history'
 import { useNavigate } from '@tanstack/react-router'
 import { fetchStaffData, getInterest } from '@/api/userApi'
+import { fetchUserProfile } from '@/api/userApi'
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ export default function Dashboard() {
   const [partialWithdrawal, setPartialWithdrawal] = useState(0);
   const [loanAccess, setLoanAccess] = useState(0);
   const [interestRate, setInterestRate] = useState<number | null>(null); // New state for interest rate
+  const [isAdmin, setIsAdmin] = useState(false); // State for admin status
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +57,17 @@ export default function Dashboard() {
       }
     };
 
+    const fetchProfile = async () => {
+      try {
+        const profile = await fetchUserProfile();
+        if (profile && profile.role === 'admin') {
+          setIsAdmin(true);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+    fetchProfile();
     fetchData();
     fetchInterestRate(); // Fetch interest rate on mount
   }, []);
@@ -70,7 +84,7 @@ export default function Dashboard() {
 
       <Main>
         <div className="mb-2 -mt-7 flex flex-col items-start space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">Staff Dashboard</h1>
+          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">{isAdmin ? "Admin Dashboard" : "Staff Dashboard"}</h1>
           <div className="flex flex-wrap items-center space-x-2 sm:flex-nowrap">
             <Button style={{ color: 'whitesmoke' }} onClick={() => navigate({ to: "/report" })}>
               Go To Reports
