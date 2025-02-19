@@ -55,18 +55,7 @@ export const columns: ColumnDef<User>[] = [
     },
     enableHiding: false,
   },
-  {
-    id: 'firstName',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='First Name' />
-    ),
-    cell: ({ row }) => {
-      const { firstName, lastName } = row.original
-      const fullName = `${firstName} ${lastName}`
-      return <LongText className='max-w-36'>{fullName}</LongText>
-    },
-    meta: { className: 'w-36' },
-  },
+
   {
     accessorKey: 'firstName',
     header: ({ column }) => (
