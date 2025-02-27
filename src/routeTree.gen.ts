@@ -54,8 +54,8 @@ const AuthenticatedHirePurchaseIndexLazyImport = createFileRoute(
 const AuthenticatedHelpCenterIndexLazyImport = createFileRoute(
   '/_authenticated/help-center/',
 )()
-const AuthenticatedAppsIndexLazyImport = createFileRoute(
-  '/_authenticated/apps/',
+const AuthenticatedAdminDashboardIndexLazyImport = createFileRoute(
+  '/_authenticated/adminDashboard/',
 )()
 const AuthenticatedAdminIndexLazyImport = createFileRoute(
   '/_authenticated/admin/',
@@ -244,15 +244,16 @@ const AuthenticatedHelpCenterIndexLazyRoute =
     ),
   )
 
-const AuthenticatedAppsIndexLazyRoute = AuthenticatedAppsIndexLazyImport.update(
-  {
-    id: '/apps/',
-    path: '/apps/',
+const AuthenticatedAdminDashboardIndexLazyRoute =
+  AuthenticatedAdminDashboardIndexLazyImport.update({
+    id: '/adminDashboard/',
+    path: '/adminDashboard/',
     getParentRoute: () => AuthenticatedRouteRoute,
-  } as any,
-).lazy(() =>
-  import('./routes/_authenticated/apps/index.lazy').then((d) => d.Route),
-)
+  } as any).lazy(() =>
+    import('./routes/_authenticated/adminDashboard/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthenticatedAdminIndexLazyRoute =
   AuthenticatedAdminIndexLazyImport.update({
@@ -437,11 +438,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexLazyImport
       parentRoute: typeof AuthenticatedRouteImport
     }
-    '/_authenticated/apps/': {
-      id: '/_authenticated/apps/'
-      path: '/apps'
-      fullPath: '/apps'
-      preLoaderRoute: typeof AuthenticatedAppsIndexLazyImport
+    '/_authenticated/adminDashboard/': {
+      id: '/_authenticated/adminDashboard/'
+      path: '/adminDashboard'
+      fullPath: '/adminDashboard'
+      preLoaderRoute: typeof AuthenticatedAdminDashboardIndexLazyImport
       parentRoute: typeof AuthenticatedRouteImport
     }
     '/_authenticated/help-center/': {
@@ -528,7 +529,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteLazyRoute: typeof AuthenticatedSettingsRouteLazyRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedAdminIndexLazyRoute: typeof AuthenticatedAdminIndexLazyRoute
-  AuthenticatedAppsIndexLazyRoute: typeof AuthenticatedAppsIndexLazyRoute
+  AuthenticatedAdminDashboardIndexLazyRoute: typeof AuthenticatedAdminDashboardIndexLazyRoute
   AuthenticatedHelpCenterIndexLazyRoute: typeof AuthenticatedHelpCenterIndexLazyRoute
   AuthenticatedHirePurchaseIndexLazyRoute: typeof AuthenticatedHirePurchaseIndexLazyRoute
   AuthenticatedRepaymentScheduleIndexLazyRoute: typeof AuthenticatedRepaymentScheduleIndexLazyRoute
@@ -542,7 +543,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedSettingsRouteLazyRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedAdminIndexLazyRoute: AuthenticatedAdminIndexLazyRoute,
-  AuthenticatedAppsIndexLazyRoute: AuthenticatedAppsIndexLazyRoute,
+  AuthenticatedAdminDashboardIndexLazyRoute:
+    AuthenticatedAdminDashboardIndexLazyRoute,
   AuthenticatedHelpCenterIndexLazyRoute: AuthenticatedHelpCenterIndexLazyRoute,
   AuthenticatedHirePurchaseIndexLazyRoute:
     AuthenticatedHirePurchaseIndexLazyRoute,
@@ -575,7 +577,7 @@ export interface FileRoutesByFullPath {
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
   '/admin': typeof AuthenticatedAdminIndexLazyRoute
-  '/apps': typeof AuthenticatedAppsIndexLazyRoute
+  '/adminDashboard': typeof AuthenticatedAdminDashboardIndexLazyRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/hire-purchase': typeof AuthenticatedHirePurchaseIndexLazyRoute
   '/repayment-schedule': typeof AuthenticatedRepaymentScheduleIndexLazyRoute
@@ -601,7 +603,7 @@ export interface FileRoutesByTo {
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
   '/admin': typeof AuthenticatedAdminIndexLazyRoute
-  '/apps': typeof AuthenticatedAppsIndexLazyRoute
+  '/adminDashboard': typeof AuthenticatedAdminDashboardIndexLazyRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/hire-purchase': typeof AuthenticatedHirePurchaseIndexLazyRoute
   '/repayment-schedule': typeof AuthenticatedRepaymentScheduleIndexLazyRoute
@@ -631,7 +633,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexLazyRoute
-  '/_authenticated/apps/': typeof AuthenticatedAppsIndexLazyRoute
+  '/_authenticated/adminDashboard/': typeof AuthenticatedAdminDashboardIndexLazyRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/_authenticated/hire-purchase/': typeof AuthenticatedHirePurchaseIndexLazyRoute
   '/_authenticated/repayment-schedule/': typeof AuthenticatedRepaymentScheduleIndexLazyRoute
@@ -661,7 +663,7 @@ export interface FileRouteTypes {
     | '/settings/display'
     | '/settings/notifications'
     | '/admin'
-    | '/apps'
+    | '/adminDashboard'
     | '/help-center'
     | '/hire-purchase'
     | '/repayment-schedule'
@@ -686,7 +688,7 @@ export interface FileRouteTypes {
     | '/settings/display'
     | '/settings/notifications'
     | '/admin'
-    | '/apps'
+    | '/adminDashboard'
     | '/help-center'
     | '/hire-purchase'
     | '/repayment-schedule'
@@ -714,7 +716,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
     | '/_authenticated/admin/'
-    | '/_authenticated/apps/'
+    | '/_authenticated/adminDashboard/'
     | '/_authenticated/help-center/'
     | '/_authenticated/hire-purchase/'
     | '/_authenticated/repayment-schedule/'
@@ -782,7 +784,7 @@ export const routeTree = rootRoute
         "/_authenticated/settings",
         "/_authenticated/",
         "/_authenticated/admin/",
-        "/_authenticated/apps/",
+        "/_authenticated/adminDashboard/",
         "/_authenticated/help-center/",
         "/_authenticated/hire-purchase/",
         "/_authenticated/repayment-schedule/",
@@ -856,8 +858,8 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/admin/index.lazy.tsx",
       "parent": "/_authenticated"
     },
-    "/_authenticated/apps/": {
-      "filePath": "_authenticated/apps/index.lazy.tsx",
+    "/_authenticated/adminDashboard/": {
+      "filePath": "_authenticated/adminDashboard/index.lazy.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/help-center/": {
