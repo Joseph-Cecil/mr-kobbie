@@ -1,10 +1,9 @@
 import {
   IconCalendar,
+  IconChartArea,
   IconChecklist,
   IconLayoutDashboard,
   IconManualGearbox,
-  // IconNotification,
-  // IconPalette,
   IconReportAnalytics,
   IconSettings,
   IconShoppingBagDiscount,
@@ -75,6 +74,11 @@ export const sidebarData: SidebarData = {
               title: 'Upload Data',
               url: '/upload-excel',
               icon: IconUpload,
+            },
+            {
+              title: 'Analytics',
+              url: '/adminDashboard',
+              icon: IconChartArea,
             }
         
           ],

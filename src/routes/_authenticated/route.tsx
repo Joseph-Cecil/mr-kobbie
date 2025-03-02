@@ -1,29 +1,23 @@
 import Cookies from 'js-cookie'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { SearchProvider } from '@/context/search-context'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/layout/app-sidebar'
 import SkipToMain from '@/components/skip-to-main'
-// import SignIn from '@/features/auth/sign-in'
 
-
-// function isAuthenticated(): boolean {
-//   const token = Cookies.get('authToken') 
-//   return Boolean(token)
-// }
+function isAuthenticated(): boolean {
+  const token = localStorage.getItem('jwtToken')
+  return Boolean(token)
+}
 
 export const Route = createFileRoute('/_authenticated')({
-  component: () => {
- 
-    // if (!isAuthenticated()) {
-      
-    //   return <SignIn />
-    // }
-
-    // Render the main authenticated component  
-    return <RouteComponent />
+  beforeLoad: async () => {
+    if (!isAuthenticated()) {
+      throw redirect({ to: '/sign-in' }) // Redirect instead of rendering SignIn component
+    }
   },
+  component: RouteComponent,
 })
 
 function RouteComponent() {

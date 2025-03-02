@@ -24,9 +24,10 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [totalContributions, setTotalContributions] = useState(0);
   const [partialWithdrawal, setPartialWithdrawal] = useState(0);
-  const [loanAccess, setLoanAccess] = useState(0);
-  const [interestRate, setInterestRate] = useState<number | null>(null); // New state for interest rate
-  const [isAdmin, setIsAdmin] = useState(false); // State for admin status
+  const [depositTopUp, setDepositTopUp] = useState(0);
+  const [totalBalance, setTotalBalance] = useState(0);
+  const [interestRate, setInterestRate] = useState<number | null>(null); 
+  const [isAdmin, setIsAdmin] = useState(false);
 
 
   useEffect(() => {
@@ -37,8 +38,9 @@ export default function Dashboard() {
         if (data && data.contributions) {
           const total = data.totalContribution;
           setTotalContributions(total);
-          setPartialWithdrawal(total * 0.5); // 50% of contributions
-          setLoanAccess(total * 5); // 5 times total contributions
+          setTotalBalance(data.balanceForTheYear || 0)
+          setPartialWithdrawal(total * 0.5);
+          setDepositTopUp(data.topUpDeposit || 0)
         }
       } catch (error) {
         console.error('Error fetching staff data:', error);
@@ -99,7 +101,7 @@ export default function Dashboard() {
             </TabsList>
           </div>
           <TabsContent value='overview' className='space-y-4'>
-            <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+            <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-5'>
 
               {/* Total Contributions */}
               <Card>
@@ -123,14 +125,26 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
 
-              {/* Loan Access */}
+              
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='text-sm font-medium'># Loan Access</CardTitle>
+                  <CardTitle className='text-sm font-medium'># Total Balance</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>₵{loanAccess.toFixed(2)}</div>
-                  <p className='text-xs text-muted-foreground'>5× Total Deposits</p>
+                  <div className='text-2xl font-bold'>₵{totalBalance.toFixed(2)}</div>
+                  <p className='text-xs text-muted-foreground'>Total Amount Contributed</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                  <CardTitle className='text-sm font-medium'># Deposit Top Up</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className='text-2xl font-bold'>
+                  ₵{depositTopUp !== null ? `${depositTopUp.toFixed(2)}` : 'Loading...'}
+                  </div>
+                  <p className='text-xs text-muted-foreground'>Deposit Top Up</p>
                 </CardContent>
               </Card>
 

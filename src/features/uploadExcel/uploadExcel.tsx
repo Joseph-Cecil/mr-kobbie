@@ -12,7 +12,7 @@ export function UploadExcelPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [jsonData, setJsonData] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [uploadKey, setUploadKey] = useState(Date.now()); // Unique key for re-render
+  const [uploadKey, setUploadKey] = useState(Date.now()); 
 
   const navigate = useNavigate();
 
@@ -66,10 +66,9 @@ export function UploadExcelPage() {
             description: "Data Uploaded Successfully!",
           });          
           
-          // Reset file input and preview
           setFiles([]);
           setJsonData("");
-          setUploadKey(Date.now()); // Force re-render of FileUpload
+          setUploadKey(Date.now());
 
           navigate({ to: "/upload-excel" }); 
         } catch (error) {
@@ -91,7 +90,6 @@ export function UploadExcelPage() {
   return (
     <>
       <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-background border-neutral-200 dark:border-neutral-800 rounded-lg">
-        {/* Add key prop to force re-render */}
         <FileUpload key={uploadKey} onChange={handleFileUpload} />
       </div>
       <div className="flex gap-10 justify-center mt-10">
