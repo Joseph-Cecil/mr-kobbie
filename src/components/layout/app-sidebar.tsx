@@ -19,7 +19,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const getUserRole = async () => {
       try {
         const user = await fetchUserProfile();
-        setIsAdmin(user.role === 'admin'); // ✅ Check if user is an admin
+        setIsAdmin(user.role === 'admin');
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Error fetching user profile:', error);
@@ -36,7 +36,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         {sidebarData.navGroups
-          .filter((group) => group.title !== 'Administrator' || isAdmin) // ✅ Hide admin section for non-admins
+          .filter((group) => group.title !== 'Administrator' || isAdmin)
           .map((props) => (
             <NavGroup key={props.title} {...props} />
           ))}

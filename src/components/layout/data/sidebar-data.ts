@@ -1,5 +1,6 @@
 import {
   IconCalendar,
+  IconCashBanknote,
   IconChartArea,
   IconChecklist,
   IconLayoutDashboard,
@@ -76,8 +77,13 @@ export const sidebarData: SidebarData = {
               icon: IconUpload,
             },
             {
+              title: 'Staff Contributions',
+              url: '/contribution-dashboard',
+              icon: IconCashBanknote,
+            },
+            {
               title: 'Analytics',
-              url: '/adminDashboard',
+              url: '/admin-dashboard',
               icon: IconChartArea,
             }
         

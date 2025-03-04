@@ -35,7 +35,7 @@ export function UploadExcelPage() {
           workbook.SheetNames.forEach((sheetName) => {
             const workSheet = workbook.Sheets[sheetName];
             sheetsData[sheetName] = XLSX.utils.sheet_to_json(workSheet);
-          });
+          }); 
   
           setJsonData(JSON.stringify(sheetsData, null, 2));
         }
