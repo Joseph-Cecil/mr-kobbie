@@ -10,8 +10,7 @@ export function UsersDialogs() {
       <UsersActionDialog
         key='user-add'
         open={open === 'add'}
-        onOpenChange={() => setOpen('add')}
-      />
+        onOpenChange={() => setOpen('add')} currentRow={null}      />
 
       <UsersInviteDialog
         key='user-invite'
@@ -29,9 +28,7 @@ export function UsersDialogs() {
               setTimeout(() => {
                 setCurrentRow(null)
               }, 500)
-            }}
-            currentRow={currentRow}
-          />
+            } } currentRow={null}          />
 
           <UsersDeleteDialog
             key={`user-delete-${currentRow._id}`}
