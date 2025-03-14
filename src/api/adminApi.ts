@@ -58,4 +58,15 @@ export const deleteUser = async (userId: string | number) => {
   return response.data;
 };
 
+export const getStaffData = async () => {
+  try {
+    const response = await apiClient.get("http://localhost:5000/api/admin/get-staff-data");
+    return response.data;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error fetching users", error);
+    throw new Error("Failed to fetch users. Please try again.");
+  }
+};
+
 

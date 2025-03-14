@@ -1,52 +1,49 @@
 import { useEffect, useState } from "react";
+import { getStaffData } from "../../api/adminApi"; // Ensure this path matches your project structure
 import { Header } from "@/components/layout/header";
 import { Main } from "@/components/layout/main";
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import { Search } from "@/components/search";
 import { ThemeSwitch } from "@/components/theme-switch";
-import { columns } from "./components/users-columns";
-import { UsersDialogs } from "./components/users-dialogs";
-import { UsersTable } from "./components/users-table";
-import UsersProvider from "./context/users-context";
-import { userListSchema, User } from "./data/schema";
-import { getAllUsers } from "../../api/adminApi";
-import { UsersTableSkeleton } from "./components/TableSkeleton";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-export default function ContributionDashboard() {
-  const [users, setUsers] = useState<User[]>([]); // Store users in state
-  const [loading, setLoading] = useState(true); // Track loading state
-  const [error, setError] = useState<string | null>(null); // Track errors
+export function ContributionDashboard() {
+  interface Contribution {
+    staffId: string;
+    name: string;
+    contributions: { [key: string]: number };
+    totalContribution: number;
+    topUpDeposit: number;
+    partialWithdrawal?: number;
+    balanceForTheYear?: number;
+  }
+
+  const [contributions, setContributions] = useState<Contribution[]>([]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchData = async () => {
       try {
-        setLoading(true);
-        const fetchedUsers = await getAllUsers();
-
-        const parsedUsers = userListSchema.parse(fetchedUsers); // Validate data
-
-        setUsers(parsedUsers); // Update state with fetched users
+        const data = await getStaffData();
+        setContributions(data);
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.error("Failed to fetch users:", error);
-        setError("Failed to load users. Please try again.");
-      } finally {
-        setLoading(false);
+        console.error("Failed to fetch staff data:", error);
       }
     };
 
-    fetchUsers(); // Call the function when component mounts
-  }, []); // Empty dependency array ensures it runs only once
-
-  if (loading) return (
-    <div>
-      <UsersTableSkeleton columns={9}/>
-    </div>
-  );
-  if (error) return <p className="text-red-500">{error}</p>;
+    fetchData();
+  }, []);
 
   return (
-    <UsersProvider>
+    <>
       <Header>
         <Search />
         <div className="ml-auto flex items-center space-x-4">
@@ -56,20 +53,59 @@ export default function ContributionDashboard() {
       </Header>
 
       <Main>
-        <div className="mb-2 flex items-center justify-between space-y-2 flex-wrap">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight">Staff Contribution Data</h2>
-            <p className="text-muted-foreground">
-              Search and View Staff Contributions Here.
-            </p>
-          </div>
+        <div className="mb-7 -mt-3 flex flex-col items-start space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">Staff Contributions</h1>
         </div>
-        <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0">
-          <UsersTable data={users} columns={columns} />
-        </div>
+        <Table>
+          <TableCaption>Contribution Records for Staff</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Staff ID</TableHead>
+              <TableHead>Staff Name</TableHead>
+              <TableHead>Jan</TableHead>
+              <TableHead>Feb</TableHead>
+              <TableHead>Mar</TableHead>
+              <TableHead>Apr</TableHead>
+              <TableHead>May</TableHead>
+              <TableHead>Jun</TableHead>
+              <TableHead>Jul</TableHead>
+              <TableHead>Aug</TableHead>
+              <TableHead>Sep</TableHead>
+              <TableHead>Oct</TableHead>
+              <TableHead>Nov</TableHead>
+              <TableHead>Dec</TableHead>
+              <TableHead>Total Contribution</TableHead>
+              <TableHead>Deposit - Top Up</TableHead>
+              <TableHead>Partial Withdrawal</TableHead>
+              <TableHead>Balance</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {contributions.length > 0 ? (
+              contributions.map((contribution, index) => (
+                <TableRow key={index}>
+                  <TableCell>{contribution.staffId}</TableCell>
+                  <TableCell>{contribution.name}</TableCell>
+                  {[
+                    "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+                    "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
+                  ].map((month, i) => (
+                    <TableCell key={i}>{contribution.contributions[month] || 0}</TableCell>
+                  ))}
+                  <TableCell>{contribution.totalContribution}</TableCell>
+                  <TableCell>{contribution.topUpDeposit}</TableCell>
+                  <TableCell>{contribution.partialWithdrawal || "N/A"}</TableCell>
+                  <TableCell>{contribution.balanceForTheYear || "N/A"}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={18} className="text-center">No records found</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </Main>
-
-      <UsersDialogs />
-    </UsersProvider>
+    </>
   );
 }
