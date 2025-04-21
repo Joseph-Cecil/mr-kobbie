@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { getStaffData } from "../../api/adminApi"; // Ensure this path matches your project structure
+import { getStaffData } from "../../api/adminApi";
 import { Header } from "@/components/layout/header";
 import { Main } from "@/components/layout/main";
 import { ProfileDropdown } from "@/components/profile-dropdown";
-import { Search } from "@/components/search";
 import { ThemeSwitch } from "@/components/theme-switch";
 import {
   Table,
@@ -42,10 +41,23 @@ export function ContributionDashboard() {
     fetchData();
   }, []);
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredContributions = contributions.filter(
+    (contribution) =>
+      contribution.staffId.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+      contribution.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <>
       <Header>
-        <Search />
+      <input
+  type="text"
+  placeholder="Search by staff ID or name"
+  className="h-8 w-full max-w-xs rounded-md border px-3 py-1 text-sm shadow-sm"
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+/>
         <div className="ml-auto flex items-center space-x-4">
           <ThemeSwitch />
           <ProfileDropdown />
@@ -62,18 +74,12 @@ export function ContributionDashboard() {
             <TableRow>
               <TableHead>Staff ID</TableHead>
               <TableHead>Staff Name</TableHead>
-              <TableHead>Jan</TableHead>
-              <TableHead>Feb</TableHead>
-              <TableHead>Mar</TableHead>
-              <TableHead>Apr</TableHead>
-              <TableHead>May</TableHead>
-              <TableHead>Jun</TableHead>
-              <TableHead>Jul</TableHead>
-              <TableHead>Aug</TableHead>
-              <TableHead>Sep</TableHead>
-              <TableHead>Oct</TableHead>
-              <TableHead>Nov</TableHead>
-              <TableHead>Dec</TableHead>
+              {[
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+              ].map((month) => (
+                <TableHead key={month}>{month}</TableHead>
+              ))}
               <TableHead>Total Contribution</TableHead>
               <TableHead>Deposit - Top Up</TableHead>
               <TableHead>Partial Withdrawal</TableHead>
@@ -81,8 +87,8 @@ export function ContributionDashboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {contributions.length > 0 ? (
-              contributions.map((contribution, index) => (
+            {filteredContributions.length > 0 ? (
+              filteredContributions.map((contribution, index) => (
                 <TableRow key={index}>
                   <TableCell>{contribution.staffId}</TableCell>
                   <TableCell>{contribution.name}</TableCell>
