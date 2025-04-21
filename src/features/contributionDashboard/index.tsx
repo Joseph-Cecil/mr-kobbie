@@ -54,10 +54,11 @@ export function ContributionDashboard() {
       <input
   type="text"
   placeholder="Search by staff ID or name"
-  className="h-8 w-full max-w-xs rounded-md border px-3 py-1 text-sm shadow-sm"
+  className="h-8 w-full max-w-xs rounded-md border border-input bg-background px-3 py-1 text-sm text-foreground shadow-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring dark:border-muted dark:bg-muted/20 dark:placeholder:text-muted-foreground"
   value={searchQuery}
   onChange={(e) => setSearchQuery(e.target.value)}
 />
+
         <div className="ml-auto flex items-center space-x-4">
           <ThemeSwitch />
           <ProfileDropdown />
